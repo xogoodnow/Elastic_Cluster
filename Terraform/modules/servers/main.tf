@@ -65,7 +65,7 @@ resource "local_file" "etcd-hosts" {
 }
 
 
-resource "local_file" "inventory" {
+resource "local_file" "instances" {
   content = templatefile("${path.module}/instances.yaml.tpl",
     {
       elastic_ips = hcloud_server.elastic.*.ipv4_address
