@@ -62,7 +62,7 @@ resource "local_file" "etc-hosts" {
 
     }
   )
-  filename = "${path.module}/../../../Ansible/roles/Ceph_Pre_Setup/files/etchost.yaml"
+  filename = "${path.module}/../../../Ansible/roles/Pre_Setup/files/etchost.yaml"
 }
 
 
