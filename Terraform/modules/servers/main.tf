@@ -65,6 +65,14 @@ resource "local_file" "etcd-hosts" {
 }
 
 
-
+resource "local_file" "inventory" {
+  content = templatefile("${path.module}/instances.yaml.tpl",
+    {
+      elastic_ips = hcloud_server.elastic.*.ipv4_address
+      monitoring_ips = hcloud_server.monitoring.*.ipv4_address
+    }
+  )
+  filename = "${path.module}/../../../Ansible/roles/Cert_Generation_Elastic/files/instances.yaml"
+}
 
 
