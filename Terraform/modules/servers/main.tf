@@ -33,7 +33,7 @@ data "hcloud_network" "private-network" {
 
 
 data "hcloud_ssh_key" "key1"  {
-  name = "kang"
+  name = "ssh_key_bastion"
 
 }
 
