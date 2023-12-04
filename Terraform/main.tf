@@ -16,9 +16,6 @@ module "servers" {
 module "private_network" {
   source       = "./modules/Private_Network"
   hcloud_token = var.hcloud_token
-  image_name   = var.image_name
-  server_type  = var.server_type
-  location     = var.location
   depends_on   = [module.servers]
 }
 
