@@ -1,0 +1,18 @@
+- name: Increasing the vm.max_map_count on elastic nodes
+  lineinfile:
+    path: /etc/sysctl.conf
+    line: vm.max_map_count=262144
+    create: yes
+
+
+- name: Fine-tune the kernel module to optimize elastic nodes
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    sysctl_set: true
+    sysctl_file: "/etc/sysctl.conf"
+    state: present
+    reload: true
+  with_items:
+    - { name: "vm.max_map_count", value: '262144' }
+
