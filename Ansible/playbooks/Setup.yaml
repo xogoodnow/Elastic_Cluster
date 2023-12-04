@@ -15,6 +15,15 @@
         - $PWD/roles/Install_Docker
 
 
+    - name: Install and Configure Elastic instances
+      include_role:
+        name: "{{ item }}"
+      with_items:
+        - $PWD/roles/Cert_Generation_Elastic
+      when: mode == 'elastic' and init_cluster == 'true'
+
+
+
     - name: Install and Configure Redis instances
       include_role:
         name: "{{ item }}"
