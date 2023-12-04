@@ -1,0 +1,84 @@
+---
+- name: check connectivity
+  ping:
+    data: alive
+
+
+- name: Create the required directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0777"
+  with_items:
+    - /root/elastic_certs/
+    - /root/elastic_certs/config/
+    - /root/elastic_certs/config/certs
+
+
+
+- name: Pull the elastic image
+  docker_image:
+    name: docker.elastic.co/elasticsearch/elasticsearch:{{ elastic_version }}
+    source: pull
+
+
+- name: Copy /etc/hosts file
+  template:
+    src: files/instances.yaml
+    dest: /root/elastic_certs/config/certs/instances.yaml
+    owner: root
+    group: root
+    mode: '0644'
+
+
+
+- name: Run the elastic container for cert generation
+  docker_container:
+    name: "elastic_cert_generator"
+    image: docker.elastic.co/elasticsearch/elasticsearch:{{ elastic_version }}
+    restart_policy: no
+    state: started
+    privileged: true
+    network_mode: host
+    volumes:
+      - /root/elastic_certs/config/:/usr/share/elasticsearch/config/
+      - /root/elastic_certs/config/certs/instances.yaml:/usr/share/elasticsearch/config/certs/instances.yaml
+
+
+
+- name: Generate the ca
+  community.docker.docker_container_exec:
+    container: "elastic_cert_generator"
+    command: bin/elasticsearch-certutil ca --silent --pem -out config/certs/ca.zip
+  register: result
+
+
+- name: Extract the ca
+  community.docker.docker_container_exec:
+    container: "elastic_cert_generator"
+    command: unzip config/certs/ca.zip -d config/certs
+  register: result
+
+
+- name: Generate the certificates
+  community.docker.docker_container_exec:
+    container: "elastic_cert_generator"
+    command: bin/elasticsearch-certutil cert --silent --pem -out config/certs/certs.zip --in config/certs/instances.yml --ca-cert config/certs/ca/ca.crt --ca-key config/certs/ca/ca.key
+  register: result
+
+
+- name: Extract the certificates
+  community.docker.docker_container_exec:
+    container: "elastic_cert_generator"
+    command: unzip config/certs/certs.zip -d config/certs
+  register: result
+
+
+- name: Print out the result of the init command
+  debug:
+    var: result
+
+
+
