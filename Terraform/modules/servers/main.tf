@@ -57,7 +57,7 @@ resource "local_file" "etc-hosts" {
       elastic_1_private_ips = hcloud_server.elastic.1.network[*].ip
       elastic_2_private_ips = hcloud_server.elastic.2.network[*].ip
       elastic_ips = hcloud_server.elastic.*.ipv4_address
-
+      monitoring_ips = hcloud_server.monitoring.*.ipv4_address
       monitoring_private_ips = hcloud_server.monitoring.0.network[*].ip
 
     }
