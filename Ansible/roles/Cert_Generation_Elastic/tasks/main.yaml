@@ -43,9 +43,12 @@
     privileged: true
     network_mode: host
     volumes:
-      - /root/elastic_certs/config/:/usr/share/elasticsearch/config/
       - /root/elastic_certs/config/certs/instances.yaml:/usr/share/elasticsearch/config/certs/instances.yaml
 
+- name: Sleep for 30s so the elastic would be ready
+  pause:
+    seconds: 30
+    prompt: Waiting for elastic to be ready for requsts
 
 
 - name: Generate the ca
