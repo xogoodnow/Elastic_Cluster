@@ -20,4 +20,4 @@
         name: "{{ item }}"
       with_items:
         - $PWD/roles/Cert_Generation_Elastic
-      when: mode == 'redis'
+      when: mode == 'elastic' and init_cluster == 'true'
