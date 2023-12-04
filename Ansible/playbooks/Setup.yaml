@@ -1,0 +1,23 @@
+---
+- name: setting up Redis cluster
+  hosts: all
+  become: true
+  tasks:
+    - name: Include variables
+      include_vars: "all.yaml"
+
+    - name: Setting the basis on all nodes
+      include_role:
+        name: "{{ item }}"
+      with_items:
+        - $PWD/roles/Pre_Setup
+        #- $PWD/roles/OS_Tuning
+        - $PWD/roles/Install_Docker
+
+
+    - name: Install and Configure Redis instances
+      include_role:
+        name: "{{ item }}"
+      with_items:
+        - $PWD/roles/Cert_Generation_Elastic
+      when: mode == 'redis'
