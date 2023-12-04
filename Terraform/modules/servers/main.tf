@@ -53,9 +53,9 @@ resource "local_file" "inventory" {
 resource "local_file" "etcd-hosts" {
   content  = templatefile("${path.module}/etchost.tpl",
     {
-      elastic_0_private_ips = hcloud_server.mon.0.network[*].ip
-      elastic_1_private_ips = hcloud_server.mon.1.network[*].ip
-      elastic_2_private_ips = hcloud_server.mon.2.network[*].ip
+      elastic_0_private_ips = hcloud_server.elastic.0.network[*].ip
+      elastic_1_private_ips = hcloud_server.elastic.1.network[*].ip
+      elastic_2_private_ips = hcloud_server.elastic.2.network[*].ip
 
       monitoring_private_ips = hcloud_server.monitoring.0.network[*].ip
 

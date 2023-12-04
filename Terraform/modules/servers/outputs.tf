@@ -3,7 +3,7 @@ output "elastic_ips" {
 }
 
 output "elastic_private_ips" {
-  value = hcloud_server.osd[*].network[*].ip
+  value = hcloud_server.elastic[*].network[*].ip
 }
 
 output "monitoring_ips" {
@@ -12,6 +12,6 @@ output "monitoring_ips" {
 
 
 output "monitoring_private_ips" {
-  value = hcloud_server.mon[*].network[*].ip
+  value = hcloud_server.monitoring[*].network[*].ip
 }
 
