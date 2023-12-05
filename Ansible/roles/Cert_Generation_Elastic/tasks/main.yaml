@@ -43,7 +43,7 @@
     privileged: true
     network_mode: host
     volumes:
-      - /root/elastic_certs/config/certs/instances.yaml:/usr/share/elasticsearch/config/certs/instances.yaml
+      - /root/elastic_certs/config/certs/instances.yaml:/usr/share/elasticsearch/instances.yaml
 
 - name: Sleep for 30s so the elastic would be ready
   pause:
@@ -55,27 +55,34 @@
   community.docker.docker_container_exec:
     container: "elastic_cert_generator"
     command: bin/elasticsearch-certutil ca --silent --pem -out config/certs/ca.zip
-  register: result
+  register: result_generate_ca
 
 
 - name: Extract the ca
   community.docker.docker_container_exec:
     container: "elastic_cert_generator"
     command: unzip config/certs/ca.zip -d config/certs
-  register: result
+  register: result_extract
 
 
 - name: Generate the certificates
   community.docker.docker_container_exec:
     container: "elastic_cert_generator"
-    command: bin/elasticsearch-certutil cert --silent --pem -out config/certs/certs.zip --in config/certs/instances.yml --ca-cert config/certs/ca/ca.crt --ca-key config/certs/ca/ca.key
-  register: result
+    command: bin/elasticsearch-certutil cert --silent --pem -out config/certs/certs.zip --in /usr/share/elasticsearch/instances.yaml --ca-cert config/certs/ca/ca.crt --ca-key config/certs/ca/ca.key
+  register: result_generate
 
 
 - name: Extract the certificates
   community.docker.docker_container_exec:
     container: "elastic_cert_generator"
     command: unzip config/certs/certs.zip -d config/certs
+  register: result_extract_certificate
+
+
+- name: Extract the certificates
+  shell:
+    cmd: docker cp elastic_cert_generator:/usr/share/elasticsearch/config/certs /root/elastic_certs/config/
+
   register: result
 
 
