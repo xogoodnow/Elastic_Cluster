@@ -15,6 +15,8 @@
     - /root/elastic_data/
     - /root/elastic_data/config/
     - /root/elastic_data/config/certs
+    - /root/elastic_data/data
+    - /root/elastic_data/kibana_data
 
 
 - name: Copy the certs to the nodes
@@ -54,7 +56,7 @@
 -
 - name: Run the containers
   community.general.docker_compose:
-    project_src: /root/elastic_data/docker-compose.yml
+    project_src: /root/elastic_data/
     pull: true
     recreate: never
     state: present
