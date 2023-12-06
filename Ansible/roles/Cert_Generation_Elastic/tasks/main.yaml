@@ -93,15 +93,22 @@
 
 - name: Fetch the certs
   fetch:
-    src: /root/elastic_certs/config/"{{ item }}"
+    src: "{{ item }}"
+    flat: true
     dest: $PWD/roles/Elastic_Setup_Dockerized/files/
   with_items:
-    - certs.zip
-    - ca.zip
-    - http_ca.crt
-    - http.p12
-    - transport.p12
-    - instances.yaml
+    - "/root/elastic_certs/config/certs/certs.zip"
+    - "/root/elastic_certs/config/certs/ca.zip"
+    - "/root/elastic_certs/config/certs/http_ca.crt"
+    - "/root/elastic_certs/config/certs/http.p12"
+    - "/root/elastic_certs/config/certs/transport.p12"
+    - "/root/elastic_certs/config/certs/instances.yaml"
+  register: result
+
+- name: print the result
+  debug:
+    var: result
+
 
 
 
