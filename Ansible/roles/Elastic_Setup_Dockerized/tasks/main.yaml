@@ -40,15 +40,21 @@
     - "/root/elastic_data/config/certs/ca.zip"
 
 
-- name: Set the config file for each elastic instance
+- name: Set the docker compose file for each elastic instance
   template:
     src: templates/docker-compose.yaml.j2
-    dest: "/root/elastic_data/docker-compose.yaml"
+    dest: "/root/elastic_data/docker-compose.yml"
 
 
+- name: Set the config file for each elastic instance
+  template:
+    src: templates/elasticsearch.yml.j2
+    dest: "/root/elastic_data/config/elasticsearch.yml"
+
+-
 - name: Run the containers
   community.general.docker_compose:
-    project_src: /root/elastic_data/docker-compose.yaml
+    project_src: /root/elastic_data/docker-compose.yml
     pull: true
     recreate: never
     state: present
