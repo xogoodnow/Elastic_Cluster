@@ -37,10 +37,10 @@
   tasks:
     - name: Include variables
       include_vars:
-        name: "{{ item }}"
+        file: "{{ playbook_dir }}/vars/{{ item }}"
       with_items:
-      - "all.yaml"
-      - "elastic.yaml"
+        - "all.yaml"
+        - "elastic.yaml"
 
     - name: Setup and Configure Elastic instances
       include_role:
