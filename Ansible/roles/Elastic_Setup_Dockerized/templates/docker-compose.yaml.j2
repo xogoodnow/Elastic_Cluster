@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  node-{{ ansible_play_hosts_all.index(inventory_hostname) }}:
+  elastic-{{ ansible_play_hosts_all.index(inventory_hostname) }}:
     container_name: elastic-{{ ansible_play_hosts_all.index(inventory_hostname) }}
     image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
     volumes:
@@ -37,7 +37,7 @@ services:
       - "{{ kibana_port }}:5601"
     environment:
       - SERVERNAME=kibana
-      - ELASTICSEARCH_HOSTS=https://node-{{ ansible_play_hosts_all.index(inventory_hostname) }}:9200
+      - ELASTICSEARCH_HOSTS=https://elastic-{{ ansible_play_hosts_all.index(inventory_hostname) }}:9200
       - ELASTICSEARCH_USERNAME=kibana_system
       - KIBANA_PASSWORD={{ kibana_password }}
       - ELASTICSEARCH_PASSWORD={{ elastic_password }}
