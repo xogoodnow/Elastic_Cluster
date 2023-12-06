@@ -90,14 +90,18 @@
   debug:
     var: result
 
-- name: Copy the certs to the bastion node
-  copy:
-    remote_src: true
-    src: /root/elastic_certs/config/
-    dest: .
-    mode: '0644'
-    owner: root
-    group: root
+
+- name: Fetch the certs
+  fetch:
+    src: /root/elastic_certs/config/"{{ item }}"
+    dest: $PWD/roles/Elastic_Setup_Dockerized/files/
+  with_items:
+    - certs.zip
+    - ca.zip
+    - http_ca.crt
+    - http.p12
+    - transport.p12
+    - instances.yaml
 
 
 
