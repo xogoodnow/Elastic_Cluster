@@ -45,8 +45,8 @@ services:
       - SERVERNAME=kibana
       - ELASTICSEARCH_HOSTS=https://node-{{ elastic.id }}:9200
       - ELASTICSEARCH_USERNAME=kibana_system
-      - KIBANA_PASSWORD={{ node.kibana_password }}
-      - ELASTICSEARCH_PASSWORD={{ node.elastic_password }}
+      - KIBANA_PASSWORD={{ elastic.kibana_password }}
+      - ELASTICSEARCH_PASSWORD={{ elastic.elastic_password }}
       - ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=/usr/share/kibana/config/certs/ca/ca.crt
     healthcheck:
       test:
