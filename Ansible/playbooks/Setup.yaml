@@ -1,5 +1,5 @@
 ---
-- name: setting up Elastic cluster
+- name: setting up the basis for the cluster
   hosts: all
   become: true
   tasks:
@@ -31,9 +31,18 @@
         - $PWD/roles/Cert_Generation_Elastic
       when: mode == 'elastic' and init_cluster == 'true'
 
+- name: setting up the Elastic cluster
+  hosts: all
+  become: true
+  tasks:
+    - name: Include variables
+      include_vars:
+        name: "{{ item }}"
+      with_items:
+      - "all.yaml"
+      - "elastic.yaml"
 
     - name: Setup and Configure Elastic instances
-      include_vars: "elastic.yaml"
       include_role:
         name: "{{ item }}"
       with_items:
