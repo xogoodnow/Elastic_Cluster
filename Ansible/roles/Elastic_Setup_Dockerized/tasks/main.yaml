@@ -19,30 +19,31 @@
 
 - name: Copy the certs to the nodes
   copy:
-    src: files/"{{ item }}"
+    src: "{{ item }}"
     dest: /root/elastic_data/config/certs/
   with_items:
-    - certs.zip
-    - ca.zip
-    - http_ca.crt
-    - http.p12
-    - transport.p12
-    - instances.yaml
+    - "files/certs.zip"
+    - "files/ca.zip"
+    - "files/http_ca.crt"
+    - "files/http.p12"
+    - "files/transport.p12"
+    - "files/instances.yaml"
 
 
 - name: Unzip the certs
   unarchive:
-    src: /root/elastic_data/config/certs/"{{ item }}"
+    src: "{{ item }}"
+    remote_src: true
     dest: /root/elastic_data/config/certs/
   with_items:
-    - certs.zip
-    - ca.zip
+    - "/root/elastic_data/config/certs/certs.zip"
+    - "/root/elastic_data/config/certs/ca.zip"
 
 
-- name: Set the config file for elastic instances
+- name: Set the config file for each elastic instance
   template:
-    dest: /root/elastic_data/docker-compose.yaml
     src: templates/docker-compose.yaml.j2
+    dest: "/root/elastic_data/docker-compose.yaml"
 
 
 - name: Run the containers
