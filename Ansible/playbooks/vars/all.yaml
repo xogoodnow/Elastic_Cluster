@@ -7,4 +7,6 @@ alertmanager_version: latest
 node_exporter_version: latest
 elastic_version: 8.11.1
 kibana_version: 8.11.1
-
+elastic_password: fancyliqurebottle
+kibana_password: tinyliqurebottle
+kibana_port: 5601
