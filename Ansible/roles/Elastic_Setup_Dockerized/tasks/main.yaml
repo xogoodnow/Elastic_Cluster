@@ -1,0 +1,22 @@
+---
+- name: check connectivity
+  ping:
+    data: alive
+
+
+- name: Set the config file for elastic instances
+  template:
+    dest: /root/elastic_data/docker-compose.yaml
+    src: templates/docker-compose.yaml.j2
+
+
+
+- name: Run the containers
+  community.general.docker_compose:
+    project_src: /root/elastic_data/docker-compose.yaml
+    pull: true
+    recreate: never
+    state: present
+    restarted: false
+    remove_orphans: no
+    remove_volumes: false
