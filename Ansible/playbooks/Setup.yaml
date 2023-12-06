@@ -24,9 +24,19 @@
 
 
 
-    - name: Install and Configure Elastic instances
+    - name: Generate required certificates for elastic
       include_role:
         name: "{{ item }}"
       with_items:
         - $PWD/roles/Cert_Generation_Elastic
       when: mode == 'elastic' and init_cluster == 'true'
+
+
+    - name: Setup and Configure Elastic instances
+      include_vars: "elastic.yaml"
+      include_role:
+        name: "{{ item }}"
+      with_items:
+        - $PWD/roles/Elastic_Setup_Dockerized
+      when: mode == 'elastic' and init_cluster == 'true'
+
