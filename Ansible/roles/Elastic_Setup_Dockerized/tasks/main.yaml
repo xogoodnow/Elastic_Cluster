@@ -4,11 +4,45 @@
     data: alive
 
 
+- name: Create the required directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0777"
+  with_items:
+    - /root/elastic_data/
+    - /root/elastic_data/config/
+    - /root/elastic_data/config/certs
+
+
+- name: Copy the certs to the nodes
+  copy:
+    src: files/"{{ item }}"
+    dest: /root/elastic_data/config/certs/
+  with_items:
+    - certs.zip
+    - ca.zip
+    - http_ca.crt
+    - http.p12
+    - transport.p12
+    - instances.yaml
+
+
+- name: Unzip the certs
+  unarchive:
+    src: /root/elastic_data/config/certs/"{{ item }}"
+    dest: /root/elastic_data/config/certs/
+  with_items:
+    - certs.zip
+    - ca.zip
+
+
 - name: Set the config file for elastic instances
   template:
     dest: /root/elastic_data/docker-compose.yaml
     src: templates/docker-compose.yaml.j2
-
 
 
 - name: Run the containers
