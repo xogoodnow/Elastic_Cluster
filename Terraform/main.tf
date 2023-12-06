@@ -6,7 +6,7 @@ module "ssh_keys" {
 module "private_network" {
   source       = "./modules/Private_Network"
   hcloud_token = var.hcloud_token
-  depends_on: [module.ssh_keys]
+  depends_on   = [module.ssh_keys]
 }
 
 module "servers" {
