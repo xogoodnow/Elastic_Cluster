@@ -90,5 +90,15 @@
   debug:
     var: result
 
+- name: Copy the certs to the bastion node
+  copy:
+    remote_src: true
+    src: /root/elastic_certs/config/
+    dest: .
+    mode: '0644'
+    owner: root
+    group: root
+
+
 
 
