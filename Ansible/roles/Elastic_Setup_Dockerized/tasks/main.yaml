@@ -63,3 +63,29 @@
     restarted: false
     remove_orphans: no
     remove_volumes: false
+
+
+- name: Wait for elastic to finish setting up
+  pause:
+    seconds: 45
+
+
+- name: Change password for kibana_system
+  uri:
+    url: "https://{{ ansible_play_hosts_all.index(inventory_hostname) }}:9200/_security/user/kibana_system/_password"
+    method: POST
+    user: "elastic"
+    password: "{{ elastic_password }}"
+    body: '{"password": ""{{ kibana_password }}""}'
+    body_format: json
+    validate_certs: false
+    status_code: 200
+    headers:
+      Content-Type: "application/json"
+
+
+- name: Restart kibana with new password
+  docker_container:
+    name: kibana-{{ ansible_play_hosts_all.index(inventory_hostname) }}
+    state: present
+    restart: true
