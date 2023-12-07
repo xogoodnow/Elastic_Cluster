@@ -72,7 +72,7 @@
 
 - name: Change password for kibana_system
   uri:
-    url: "https://{{ ansible_play_hosts_all.index(inventory_hostname) }}:9200/_security/user/kibana_system/_password"
+    url: "https://{{ ansible_host }}:9200/_security/user/kibana_system/_password"
     method: POST
     user: "elastic"
     password: "{{ elastic_password }}"
@@ -82,6 +82,7 @@
     status_code: 200
     headers:
       Content-Type: "application/json"
+  when: mode == 'elastic' and init_cluster == 'true'
 
 
 - name: Restart kibana with new password
