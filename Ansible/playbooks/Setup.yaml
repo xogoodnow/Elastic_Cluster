@@ -4,7 +4,10 @@
   become: true
   tasks:
     - name: Include variables
-      include_vars: "all.yaml"
+      include_vars:
+        file: "{{ playbook_dir }}/vars/{{ item }}"
+      with_items:
+        - "all.yaml"
 
     - name: Setting the basis on all nodes
       include_role:
