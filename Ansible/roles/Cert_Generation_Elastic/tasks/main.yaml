@@ -103,13 +103,10 @@
     - "/root/elastic_certs/config/certs/http.p12"
     - "/root/elastic_certs/config/certs/transport.p12"
     - "/root/elastic_certs/config/certs/instances.yaml"
-  register: result
-
-- name: print the result
-  debug:
-    var: result
 
 
-
-
+- name: Removing the container for generating certs
+  docker_container:
+    name: "elastic_cert_generator"
+    state: absent
 
