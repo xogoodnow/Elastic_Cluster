@@ -58,7 +58,7 @@
     name: docker
 
 - name: Restart the docker service on the node
-  sysctl:
+  service:
     name: docker
-    state: present
-    reload: true
+    state: restarted
+
