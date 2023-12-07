@@ -76,17 +76,12 @@
     method: POST
     user: "elastic"
     password: "{{ elastic_password }}"
-    body: '{"password": ""{{ kibana_password }}""}'
+    body: '{"password": "{{ kibana_password }}"}'
     body_format: json
     validate_certs: false
+    force_basic_auth: true
     status_code: 200
     headers:
       Content-Type: "application/json"
-  when: mode == 'elastic' and init_cluster == 'true'
 
 
-- name: Restart kibana with new password
-  docker_container:
-    name: kibana-{{ ansible_play_hosts_all.index(inventory_hostname) }}
-    state: present
-    restart: true
