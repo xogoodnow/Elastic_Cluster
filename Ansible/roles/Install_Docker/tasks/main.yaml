@@ -57,6 +57,10 @@
   pip:
     name: docker
 
+- name: Wait for the service to be ready before restarting
+  pause:
+    seconds: 20
+    
 - name: Restart the docker service on the node
   service:
     name: docker
