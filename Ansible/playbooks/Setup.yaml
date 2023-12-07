@@ -37,7 +37,6 @@
 - name: setting up the Elastic cluster
   hosts: all
   become: true
-  serial: 1
   tasks:
     - name: Include variables
       include_vars:
@@ -51,4 +50,22 @@
       with_items:
         - $PWD/roles/Elastic_Setup_Dockerized
       when: mode == 'elastic'
+
+
+
+    - name: Change password for kibana_system
+      uri:
+        url: "https://{{ ansible_host }}:9200/_security/user/kibana_system/_password"
+        method: POST
+        user: "elastic"
+        password: "{{ elastic_password }}"
+        body: '{"password": "{{ kibana_password }}"}'
+        body_format: json
+        validate_certs: false
+        force_basic_auth: true
+        status_code: 200
+        headers:
+          Content-Type: "application/json"
+        when: mode == 'elastic' and init_cluster == 'true'
+
 
