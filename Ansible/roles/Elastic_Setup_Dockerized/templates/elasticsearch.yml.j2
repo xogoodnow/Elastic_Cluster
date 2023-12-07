@@ -15,7 +15,7 @@ path.data:  /var/elasticsearch/data
 
 node.name: elastic-{{ ansible_play_hosts_all.index(inventory_hostname) }}
 
-cluster.initial_master_nodes: elastic-1,elastic-2,elastic-3
+cluster.initial_master_nodes: elastic-0,elastic-1,elastic-2
 
 
 
