@@ -28,19 +28,18 @@ services:
       retries: 120
 
   kibana-{{ ansible_play_hosts_all.index(inventory_hostname) }}:
+    container_name:  kibana-{{ ansible_play_hosts_all.index(inventory_hostname) }}
     image: docker.elastic.co/kibana/kibana:{{kibana_version}}
     volumes:
       - /root/elastic_data/config/certs:/usr/share/kibana/config/certs
       - /root/elastic_data/kibana_data:/usr/share/kibana/data
 
-    ports:
-      - "{{ kibana_port }}:5601"
+    network_mode: host
     environment:
       - SERVERNAME=kibana
-      - ELASTICSEARCH_HOSTS=https://elastic-{{ ansible_play_hosts_all.index(inventory_hostname) }}:9200
+      - ELASTICSEARCH_HOSTS=https://elastic-{{ ansible_play_hosts_all.index(inventory_hostname) }}-public:9200
       - ELASTICSEARCH_USERNAME=kibana_system
-      - KIBANA_PASSWORD={{ kibana_password }}
-      - ELASTICSEARCH_PASSWORD={{ elastic_password }}
+      - ELASTICSEARCH_PASSWORD={{ kibana_password }}
       - ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=/usr/share/kibana/config/certs/ca/ca.crt
     healthcheck:
       test:
