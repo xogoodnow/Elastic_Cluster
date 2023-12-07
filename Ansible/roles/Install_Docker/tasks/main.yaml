@@ -57,3 +57,8 @@
   pip:
     name: docker
 
+- name: Restart the docker service on the node
+  sysctl:
+    name: docker
+    state: present
+    reload: true
