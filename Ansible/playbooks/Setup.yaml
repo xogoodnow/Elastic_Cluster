@@ -11,8 +11,8 @@
         name: "{{ item }}"
       with_items:
         - $PWD/roles/Pre_Setup
-        #- $PWD/roles/OS_Tuning
         - $PWD/roles/Install_Docker
+        - $PWD/roles/Node_Exporter
 
 
     - name: Tuning the nodes for elastic
@@ -34,18 +34,18 @@
 - name: setting up the Elastic cluster
   hosts: all
   become: true
+  serial: 1
   tasks:
     - name: Include variables
       include_vars:
         file: "{{ playbook_dir }}/vars/{{ item }}"
       with_items:
         - "all.yaml"
-        - "elastic.yaml"
 
     - name: Setup and Configure Elastic instances
       include_role:
         name: "{{ item }}"
       with_items:
         - $PWD/roles/Elastic_Setup_Dockerized
-      when: mode == 'elastic' and init_cluster == 'true'
+      when: mode == 'elastic'
 
