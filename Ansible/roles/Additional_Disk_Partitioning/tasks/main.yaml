@@ -22,7 +22,7 @@
     label: "gpt"
 
 - name: Read device information (always use unit when probing)
-  community.general.parted: device="{{ Disk_Attach_Path }}" unit=MiB
+  community.general.parted: device="{{ Disk_Attach_Path }}1" unit=MiB
   register: disk_info
 
 - name: Print out the disk info
@@ -32,5 +32,5 @@
 - name: Create a ext4 filesystem on "{{ Disk_Attach_Path }}"
   community.general.filesystem:
     fstype: "ext4"
-    dev: "{{ Disk_Attach_Path }}"
+    dev: "{{ Disk_Attach_Path }}1"
     force: true
