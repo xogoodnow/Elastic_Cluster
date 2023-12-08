@@ -59,7 +59,7 @@
 
 - name: Wait for the service to be ready before restarting
   pause:
-    seconds: 20
+    seconds: 40
 
 - name: Restart the docker service on the node
   service:
