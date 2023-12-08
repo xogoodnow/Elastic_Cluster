@@ -1,0 +1,30 @@
+---
+- name: check connectivity
+  ping:
+    data: alive
+
+- name: Create the required directories
+  file:
+    mode: 0777
+    path: /root/monitoring/
+    owner: root
+    group: root
+    state: directory
+
+- name: Set the docker compose file for each elastic instance
+  template:
+    src: templates/docker-compose.yaml.j2
+    dest: "/root/monitoring/docker-compose.yml"
+
+-
+- name: Run the containers
+  community.general.docker_compose:
+    project_src: /root/monitoring/
+    pull: true
+    recreate: never
+    state: present
+    restarted: false
+    remove_orphans: no
+    remove_volumes: false
+
+
