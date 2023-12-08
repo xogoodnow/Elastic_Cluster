@@ -3,6 +3,14 @@
   ping:
     data: alive
 
+
+- name: Remove partition number 1
+  community.general.parted:
+    device: "{{ Disk_Attach_Path }}"
+    number: 1
+    state: absent
+
+
 - name: Create a new primary partition
   community.general.parted:
     device: "{{ Disk_Attach_Path }}"
@@ -20,3 +28,9 @@
 - name: Print out the disk info
   debug:
     var: disk_info
+
+- name: Create a ext4 filesystem on "{{ Disk_Attach_Path }}"
+  community.general.filesystem:
+    fstype: "ext4"
+    dev: "{{ Disk_Attach_Path }}"
+    force: true
