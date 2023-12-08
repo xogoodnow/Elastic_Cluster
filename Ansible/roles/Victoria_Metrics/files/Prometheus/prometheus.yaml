@@ -25,6 +25,11 @@ scrape_configs:
           - elastic-0-public:9100
           - elastic-1-public:9100
           - elastic-2-public:9100
+
+  - job_name: 'elastic_exporter'
+    scrape_interval: 20s
+    static_configs:
+      - targets:
           - elastic-0-public:9114
           - elastic-1-public:9114
           - elastic-2-public:9114
