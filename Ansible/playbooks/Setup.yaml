@@ -17,6 +17,12 @@
         - $PWD/roles/Install_Docker
         - $PWD/roles/Node_Exporter
 
+    - name: Setting up the additional disks
+      include_role:
+        name: "{{ item }}"
+      with_items:
+        - $PWD/roles/Additional_Disk_Partitioning
+        - $PWD/roles/Additional_Disk_Mount
 
     - name: Tuning the nodes for elastic
       include_role:
