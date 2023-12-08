@@ -91,7 +91,7 @@
 
     - name: Set password for monitoring user
       uri:
-        url: "https://{{ ansible_host }}:9200/_security/user/{{ monitoring_user }}/_password"
+        url: "https://{{ ansible_host }}:9200/_security/user/{{ monitoring_user }}"
         method: POST
         user: "elastic"
         password: "{{ elastic_password }}"
