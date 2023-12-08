@@ -18,7 +18,7 @@
 
 - name: Extract the UUID of the additional disk
   shell:
-    cmd: blkid -o full | grep "{{ Disk_Attach_Path }}" | awk -F '"' '{print $2}'
+    cmd: blkid -o full | grep "{{ Disk_Attach_Path }}1" | awk -F '"' '{print $2}'
   register: disk_uuid
   changed_when: false
 
