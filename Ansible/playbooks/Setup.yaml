@@ -23,6 +23,7 @@
       with_items:
         - $PWD/roles/Additional_Disk_Partitioning
         - $PWD/roles/Additional_Disk_Mount
+      when: mode == 'elastic'
 
     - name: Tuning the nodes for elastic
       include_role:
