@@ -63,7 +63,9 @@
         - $PWD/roles/Elastic_Setup_Dockerized
       when: mode == 'elastic'
 
-
+    - name: Pause for 30 seconds before creating the users
+      pause:
+        seconds: 30
 
     - name: Change password for kibana_system
       uri:
@@ -80,4 +82,26 @@
           Content-Type: "application/json"
       when: mode == 'elastic' and init_cluster == 'true'
 
+    - name: Set password for monitoring user
+      uri:
+        url: "https://{{ ansible_host }}:9200/_security/user/{{ monitoring_user }}/_password"
+        method: POST
+        user: "elastic"
+        password: "{{ elastic_password }}"
+        body: '{"password": "{{ monitoring_password }}","roles" : [ "superuser" ]}'
+        body_format: json
+        validate_certs: false
+        force_basic_auth: true
+        status_code: 200
+        headers:
+          Content-Type: "application/json"
+      when: mode == 'elastic' and init_cluster == 'true'
+
+
+    - name: Set up the elastic exporter
+      include_role:
+        name: "{{ item }}"
+      with_items:
+        - $PWD/roles/Elastic_Exporter
+      when: mode == 'elastic'
 
