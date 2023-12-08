@@ -1,25 +1,22 @@
 version: "3.8"
 services:
-
-    elasticsearch_exporter:
-        container_name: elasticsearch_exporter
-        image: "quay.io/prometheuscommunity/elasticsearch-exporter:{{ elasticsearch-exporter_version }"
-        command:
-            - '--es.uri=https://{{ monitoring_user }}:{{ monitoring_password }}@node-{{ ansible_play_hosts_all.index(inventory_hostname) }}-public:9200'
-            - '--collector.clustersettings'
-            - '--es.indices'
-            - '--es.indices_settings'
-            - '--es.aliases'
-            - '--es.shards'
-            - '--es.snapshots'
-            - '--es.data_stream'
-            - '--es.indices_mappings'
-            - '--es.slm'
-            - '--es.timeout=30s'
-            - '--es.clusterinfo.interval=1m'
-            - '--es.ssl-skip-verify'
-
-        restart: always
-        network_mode: host
-
+  elasticsearch_exporter:
+    container_name: elasticsearch_exporter
+    image: "quay.io/prometheuscommunity/elasticsearch-exporter:{{ elasticsearch_exporter_version }}"
+    command:
+      - '--es.uri=https://{{ monitoring_user }}:{{ monitoring_password }}@elastic-{{ ansible_play_hosts_all.index(inventory_hostname) }}-public:9200'
+      - '--collector.clustersettings'
+      - '--es.indices'
+      - '--es.indices_settings'
+      - '--es.aliases'
+      - '--es.shards'
+      - '--es.snapshots'
+      - '--es.data_stream'
+      - '--es.indices_mappings'
+      - '--es.slm'
+      - '--es.timeout=30s'
+      - '--es.clusterinfo.interval=1m'
+      - '--es.ssl-skip-verify'
+    restart: always
+    network_mode: host
 
