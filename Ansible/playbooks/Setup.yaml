@@ -88,6 +88,7 @@
         headers:
           Content-Type: "application/json"
       when: mode == 'elastic' and init_cluster == 'true'
+      register: kibana_system
 
     - name: Set password for monitoring user
       uri:
@@ -103,6 +104,15 @@
         headers:
           Content-Type: "application/json"
       when: mode == 'elastic' and init_cluster == 'true'
+      register: monitoring_user
+
+    - name: Print out the monitoring user info
+      debug:
+        var: monitoring_user
+
+    - name: Print out the monitoring user info
+      debug:
+        var: kibana_system
 
 
     - name: Set up the elastic exporter
