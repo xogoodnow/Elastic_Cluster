@@ -52,17 +52,11 @@
     - docker-compose-plugin
     - python3-pip
 
+- name: Wait for docker to be ready
+  pause:
+    seconds: 20
 
 - name: install dockerpy
   pip:
     name: docker
-
-- name: Wait for the service to be ready before restarting
-  pause:
-    seconds: 40
-
-- name: Restart the docker service on the node
-  service:
-    name: docker
-    state: restarted
 
