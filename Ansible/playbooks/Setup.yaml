@@ -125,6 +125,7 @@
 - name: Backing up elastic
   hosts: all
   become: true
+  serial: 1
   tasks:
     - name: Include variables
       include_vars:
@@ -136,5 +137,20 @@
       include_role:
         name: "{{ item }}"
       with_items:
-        - $PWD/roles/Elastic_Snapshotting
+        - $PWD/roles/Elastic_Snapshotting/Elastic_Enable_Snapshotting
       when: mode == 'elastic'
+
+    - name: Register snapshot repository on elastic
+      include_role:
+        name: "{{ item }}"
+      with_items:
+        - $PWD/roles/Elastic_Snapshotting/Elastic_Register_Repository
+      when: mode == 'elastic' and init_cluster == 'true'
+
+
+    - name: Set SLM on elastic
+      include_role:
+        name: "{{ item }}"
+      with_items:
+        - $PWD/roles/Elastic_Snapshotting/Elastic_SLM
+      when: mode == 'elastic' and init_cluster == 'true'
