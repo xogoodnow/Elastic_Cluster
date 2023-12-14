@@ -1,0 +1,35 @@
+---
+- name: check connectivity
+  ping:
+    data: alive
+
+- name: Installing s3-repo module on elastic
+  community.docker.docker_container_exec:
+    container: "elastic-{{ ansible_play_hosts_all.index(inventory_hostname) }}"
+    command: bin/elasticsearch-plugin install repository-s3
+  register: result_module_enable
+
+- name: Print out the result of module installation
+  debug:
+    var: result_module_enable
+
+- name: Add secret key to the elastic node
+  community.docker.docker_container_exec:
+    container: "elastic-{{ ansible_play_hosts_all.index(inventory_hostname) }}"
+    command: echo "{{ snapshot_buck_access_key }}" | bin/elasticsearch-keystore add s3.client.default.access_key --stdin
+
+- name: Add secret key to the elastic node
+  community.docker.docker_container_exec:
+    container: "elastic-{{ ansible_play_hosts_all.index(inventory_hostname) }}"
+    command: echo "{{ snapshot_buck_secret_key }}" | bin/elasticsearch-keystore add s3.client.default.access_key --stdin
+
+- name: Restart elastic
+  docker_container:
+    name: "elastic-{{ ansible_play_hosts_all.index(inventory_hostname) }}"
+    restart: true
+
+
+
+
+
+
