@@ -3,38 +3,38 @@
   ping:
     data: alive
 
-- name: Create Elasticsearch S3 Snapshot Repository
+- name: Create Elasticsearch SLM Policy
   uri:
-    url: "https://{{ ansible_host }}:9200/_snapshot/{{ snapshot_registry_name }}"
+    url: "https://{{ ansible_host }}:9200/_slm/policy/{{ snapshot_policy_name }}"
     method: PUT
     user: "elastic"
     password: "{{ elastic_password }}"
     body: >
-        {
-          "schedule": "0 30 1 * * ?", 
-          "name": "{{ snapshot_policy_name }}", 
-          "master_timeout": "15m",
-          "repository": "{{ snapshot_registry_name}}", 
-          "config": { 
-            "indices": ["*", "important"], 
-            "ignore_unavailable": false,
-            "include_global_state": false
-          },
-          "retention": { 
-            "expire_after": "10d", 
-            "min_count": 5, 
-            "max_count": 50 
-          }
+      {
+        "schedule": "0 30 1 * * ?", 
+        "name": "{{ snapshot_policy_name }}", 
+        "repository": "{{ snapshot_registry_name}}", 
+        "master_timeout": "15m",
+        "config": { 
+          "indices": ["*", "important"], 
+          "ignore_unavailable": false,
+          "include_global_state": true
+        },
+        "retention": { 
+          "expire_after": "10d", 
+          "min_count": 5, 
+          "max_count": 50 
         }
+      }
     body_format: json
     validate_certs: false
     force_basic_auth: true
     status_code: 200
     headers:
       Content-Type: "application/json"
-  register: slm_created
+  register: slm_policy_created
 
 - name: Print out the result of the request
   debug:
-    var: slm_created
+    var: slm_policy_created
 
