@@ -1,0 +1,32 @@
+---
+- name: check connectivity
+  ping:
+    data: alive
+
+- name: Create Elasticsearch S3 Snapshot Repository
+  uri:
+    url: "https://{{ ansible_host }}:9200/_snapshot/{{ snapshot_registry_name }}"
+    method: PUT
+    user: "elastic"
+    password: "{{ elastic_password }}"
+    body: >
+      {
+        "type": "s3",
+        "settings": {
+          "bucket": "{{ bucket_name }}",
+          "endpoint": "{{ snapshot_s3_endpoint }}"
+        }
+      }
+    body_format: json
+    validate_certs: false
+    force_basic_auth: true
+    status_code: 200
+    headers:
+      Content-Type: "application/json"
+  register: snapshot_repository_created
+
+- name: Print out the result of the request
+  # the result must be acknowledged
+  debug:
+    var: snapshot_repository_created
+
