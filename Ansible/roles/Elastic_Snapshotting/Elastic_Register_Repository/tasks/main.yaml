@@ -13,7 +13,7 @@
       {
         "type": "s3",
         "settings": {
-          "bucket": "{{ bucket_name }}",
+          "bucket": "{{ snapshot_bucket_name }}",
           "endpoint": "{{ snapshot_s3_endpoint }}"
         }
       }
