@@ -14,3 +14,8 @@ elastic_password: fancyliqurebottle
 kibana_password: tinyliqurebottle
 kibana_port: 5601
 Disk_Attach_Path: /dev/sdb
+snapshot_bucket_name: <bucket_name>
+snapshot_buck_access_key: <access_key>
+snapshot_bucket_secret_key: <secret_key>
+snapshot_s3_endpoint: <s3_endpoint>
+snapshot_registry_name: <registry_name>
