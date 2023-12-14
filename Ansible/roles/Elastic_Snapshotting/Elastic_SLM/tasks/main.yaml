@@ -16,17 +16,23 @@
 - name: Add secret key to the elastic node
   community.docker.docker_container_exec:
     container: "elastic-{{ ansible_play_hosts_all.index(inventory_hostname) }}"
-    command: echo "{{ snapshot_buck_access_key }}" | bin/elasticsearch-keystore add s3.client.default.access_key --stdin
+    command: echo "{{ snapshot_bucket_access_key }}" | bin/elasticsearch-keystore add s3.client.default.access_key --stdin
 
 - name: Add secret key to the elastic node
   community.docker.docker_container_exec:
     container: "elastic-{{ ansible_play_hosts_all.index(inventory_hostname) }}"
-    command: echo "{{ snapshot_buck_secret_key }}" | bin/elasticsearch-keystore add s3.client.default.access_key --stdin
+    command: echo "{{ snapshot_bucket_secret_key }}" | bin/elasticsearch-keystore add s3.client.default.access_key --stdin
 
 - name: Restart elastic
   docker_container:
     name: "elastic-{{ ansible_play_hosts_all.index(inventory_hostname) }}"
     restart: true
+
+- name: Pause for the node to be ready
+  pause:
+    seconds: 30
+
+
 
 
 
