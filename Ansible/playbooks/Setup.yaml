@@ -122,3 +122,19 @@
         - $PWD/roles/Elastic_Exporter
       when: mode == 'elastic'
 
+- name: Backing up elastic
+  hosts: all
+  become: true
+  tasks:
+    - name: Include variables
+      include_vars:
+        file: "{{ playbook_dir }}/vars/{{ item }}"
+      with_items:
+        - "all.yaml"
+
+    - name: Enable snapshotting on elastic
+      include_role:
+        name: "{{ item }}"
+      with_items:
+        - $PWD/roles/Elastic_Snapshotting
+      when: mode == 'elastic'
