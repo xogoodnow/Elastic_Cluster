@@ -140,6 +140,19 @@
         - $PWD/roles/Elastic_Snapshotting/Elastic_Enable_Snapshotting
       when: mode == 'elastic'
 
+
+
+- name: Setting up snapshotting on the cluster
+  hosts: all
+  become: true
+  serial: 1
+  tasks:
+    - name: Include variables
+      include_vars:
+        file: "{{ playbook_dir }}/vars/{{ item }}"
+      with_items:
+        - "all.yaml"
+
     - name: Register snapshot repository on elastic
       include_role:
         name: "{{ item }}"
