@@ -15,8 +15,8 @@ kibana_password: tinyliqurebottle
 kibana_port: 5601
 Disk_Attach_Path: /dev/sdb
 snapshot_bucket_name: <bucket_name>
-snapshot_bucket_access_key: <access_key>
-snapshot_bucket_secret_key: <secret_key>
-snapshot_s3_endpoint: <s3_endpoint>
+snapshot_bucket_access_key: "<access_key>"   #Put the value in double quotes
+snapshot_bucket_secret_key: "<secret_key>"   #Put the value in double quotes
+snapshot_s3_endpoint: "<s3_endpoint>"        #Put the value in double quotes
 snapshot_registry_name: <registry_name>
 snapshot_policy_name: <policy_name>
