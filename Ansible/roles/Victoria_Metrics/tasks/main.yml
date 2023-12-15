@@ -54,7 +54,8 @@
     mode: 0777
   with_items:
     - 1860.json
-    - 2322.json
+    - 4358_aux.json
+    - 14191_main.json
     - dashboards.yaml
 
 
