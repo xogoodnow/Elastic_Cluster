@@ -3,7 +3,6 @@
     <h1>Graceful Shutdown of Elasticsearch Node for Maintenance</h1>
 </div>
 
-This guide provides steps for safely shutting down an Elasticsearch node running in a Docker container for maintenance purposes.
 
 ## Pre-Shutdown Preparation
 
