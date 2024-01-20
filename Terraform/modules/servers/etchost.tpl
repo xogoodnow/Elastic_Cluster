@@ -2,13 +2,13 @@
 
 ${join(" ", monitoring_private_ips)} monitoring-0
 
-${join(" ", elastic_0_private_ips)} elastic-0
-${join(" ", elastic_1_private_ips)} elastic-1
-${join(" ", elastic_2_private_ips)} elastic-2
+${join(" ", elastic_0_private_ips)} elastic-1
+${join(" ", elastic_1_private_ips)} elastic-2
+${join(" ", elastic_2_private_ips)} elastic-3
 
 
 %{ for index, ip in elastic_ips }
-${ip}    elastic-${index}-public
+${ip}    elastic-${index + 1}-public
 %{ endfor }
 
 
