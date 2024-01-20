@@ -95,7 +95,7 @@
   fetch:
     src: "{{ item }}"
     flat: true
-    dest: $PWD/roles/Elastic_Setup_Dockerized/files/
+    dest: $PWD/roles/Elasticsearch_Setup_Dockerized/files/
   with_items:
     - "/root/elastic_certs/config/certs/certs.zip"
     - "/root/elastic_certs/config/certs/ca.zip"
