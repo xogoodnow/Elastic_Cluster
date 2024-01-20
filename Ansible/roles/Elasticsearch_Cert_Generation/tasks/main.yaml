@@ -8,7 +8,7 @@
 
 - name: Pull the elastic image
   docker_image:
-    name: docker.elastic.co/elasticsearch/elasticsearch:{{ elastic_version }}
+    name: {{ ELASTIC_BASE_IMAGE }}:{{ ELASTIC_VERSION }}
     source: pull
 
 
@@ -25,7 +25,7 @@
 - name: Run the elastic container for cert generation
   docker_container:
     name: "elastic_cert_generator"
-    image: docker.elastic.co/elasticsearch/elasticsearch:{{ elastic_version }}
+    image: {{ ELASTIC_BASE_IMAGE }}:{{ ELASTIC_VERSION }}
     restart_policy: no
     state: started
     privileged: true
@@ -36,7 +36,7 @@
 - name: Sleep for 30s so the elastic would be ready
   pause:
     seconds: 30
-    prompt: Waiting for elastic to be ready for requsts
+    prompt: Waiting for elastic to be ready for requests
 
 
 - name: Generate the ca
