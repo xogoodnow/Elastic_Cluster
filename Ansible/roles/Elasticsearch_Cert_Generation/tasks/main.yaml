@@ -12,10 +12,10 @@
     source: pull
 
 
-- name: Copy /etc/hosts file
+- name: Copy Instances file for bulk certificate generation
   template:
     src: files/instances.yaml
-    dest: /root/elastic_certs/config/certs/instances.yaml
+    dest: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/Certs/instances.yaml"
     owner: root
     group: root
     mode: '0644'
@@ -31,7 +31,7 @@
     privileged: true
     network_mode: host
     volumes:
-      - /root/elastic_certs/config/certs/instances.yaml:/usr/share/elasticsearch/instances.yaml
+      - "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/Certs/instances.yaml:/usr/share/elasticsearch/instances.yaml"
 
 - name: Sleep for 30s so the elastic would be ready
   pause:
@@ -69,8 +69,7 @@
 
 - name: Extract the certificates
   shell:
-    cmd: docker cp elastic_cert_generator:/usr/share/elasticsearch/config/certs /root/elastic_certs/config/
-
+    cmd: "docker cp elastic_cert_generator:/usr/share/elasticsearch/config/certs {{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/"
   register: result
 
 
@@ -81,16 +80,16 @@
 
 - name: Fetch the certs
   fetch:
-    src: "{{ item }}"
+    src: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/Certs/{{ item }}"
     flat: true
     dest: $PWD/roles/Elasticsearch_Setup_Dockerized/files/
   with_items:
-    - "/root/elastic_certs/config/certs/certs.zip"
-    - "/root/elastic_certs/config/certs/ca.zip"
-    - "/root/elastic_certs/config/certs/http_ca.crt"
-    - "/root/elastic_certs/config/certs/http.p12"
-    - "/root/elastic_certs/config/certs/transport.p12"
-    - "/root/elastic_certs/config/certs/instances.yaml"
+    - "certs.zip"
+    - "ca.zip"
+    - "http_ca.crt"
+    - "http.p12"
+    - "transport.p12"
+    - "instances.yaml"
 
 
 - name: Removing the container for generating certs
