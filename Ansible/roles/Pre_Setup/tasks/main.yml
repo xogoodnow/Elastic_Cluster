@@ -32,6 +32,7 @@
       - telnet
       - docker-compose
       - unzip
+      - tree
     state: present
 
 
@@ -49,14 +50,14 @@
   copy:
     dest: /etc/resolvconf/resolv.conf.d/head
     content: |
-      nameserver {{ name_server }}
+      nameserver {{ NAME_SERVER }}
 
 
 - name: edit resolv.conf file
   copy:
     dest: /etc/resolv.conf
     content: |
-      nameserver {{ name_server }}
+      nameserver {{ NAME_SERVER }}
 
 
 - name: enable resolvconf service
