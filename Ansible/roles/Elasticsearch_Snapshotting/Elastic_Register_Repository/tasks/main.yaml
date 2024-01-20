@@ -8,13 +8,13 @@
     url: "https://{{ ansible_host }}:9200/_snapshot/{{ snapshot_registry_name }}"
     method: PUT
     user: "elastic"
-    password: "{{ elastic_password }}"
+    password: "{{ ELASTIC_PASSWORD }}"
     body: >
       {
         "type": "s3",
         "settings": {
-          "bucket": "{{ snapshot_bucket_name }}",
-          "endpoint": "{{ snapshot_s3_endpoint }}"
+          "bucket": "{{ SNAPSHOT_BUCKET_NAME }}",
+          "endpoint": "{{ SNAPSHOT_S3_ENDPOINT }}"
         }
       }
     body_format: json
