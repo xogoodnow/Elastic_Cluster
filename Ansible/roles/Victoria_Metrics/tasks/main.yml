@@ -12,27 +12,27 @@
 
 - name: Create the required directories
   file:
-    path: "{{ item }}"
+    path: "{{ VICTORIA_METRICS_BASE_DIRECTORY }}{{ item }}"
     state: directory
     recurse: true
     mode: 0777
     owner: root
     group: root
   with_items:
-    - /root/monitoring
-    - /root/monitoring/Grafana
-    - /root/monitoring/Prometheus
-    - /root/monitoring/Alertmanager
-    - /root/monitoring/Dashboards
-    - /root/monitoring/Grafana/provisioning
-    - /root/monitoring/Grafana/provisioning/dashboards
+    - Monitoring
+    - Monitoring/Grafana
+    - Monitoring/Prometheus
+    - Monitoring/Alertmanager
+    - Monitoring/Dashboards
+    - Monitoring/Grafana/provisioning
+    - Monitoring/Grafana/provisioning/dashboards
 
 
 
 - name: Copy alertmanager files
   copy:
     src: files/Alertmanager/alertmanager.yaml
-    dest: /root/monitoring/Alertmanager/
+    dest: "{{ VICTORIA_METRICS_BASE_DIRECTORY }}Monitoring/Alertmanager/"
     force: true
     mode: 0777
 
@@ -40,7 +40,7 @@
 - name: Copy Grafana files
   copy:
     src: files/Grafana/grafana.ini
-    dest: /root/monitoring/Grafana/
+    dest: "{{ VICTORIA_METRICS_BASE_DIRECTORY }}Monitoring/Grafana/"
     force: true
     mode: 0777
 
@@ -48,7 +48,7 @@
 - name: Copy dashboards files
   copy:
     src: files/Grafana/provisioning/dashboards/{{ item }}
-    dest: /root/monitoring/Grafana/provisioning/dashboards/
+    dest: "{{ VICTORIA_METRICS_BASE_DIRECTORY }}Monitoring/Grafana/provisioning/dashboards/"
     force: true
     follow: true
     mode: 0777
@@ -62,7 +62,7 @@
 - name: Copy Prometheus files
   copy:
     src: files/Prometheus/{{ item }}
-    dest: /root/monitoring/Prometheus/
+    dest: "{{ VICTORIA_METRICS_BASE_DIRECTORY }}Monitoring/Prometheus/"
     force: true
     follow: true
     mode: 0777
@@ -129,7 +129,7 @@
       - 8429:8429
     volumes:
       - vmagentdata:/vmagentdata
-      - /root/monitoring/Prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
+      - "{{ VICTORIA_METRICS_BASE_DIRECTORY }}Monitoring/Prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml"
     command:
       - "--promscrape.config=/etc/prometheus/prometheus.yml"
       - "--remoteWrite.url=http://localhost:8428/api/v1/write"
@@ -171,15 +171,14 @@
     name: grafana
     state: started
     restart: true
-
     image: grafana/grafana:{{ grafana_version }}
     restart_policy: unless-stopped
     published_ports:
       - 3000:3000
     volumes:
       - grafana_data:/var/lib/grafana
-      - /root/monitoring/Grafana/:/etc/grafana/
-      - /root/monitoring/Grafana/provisioning/dashboards/:/var/lib/grafana/provisioning/dashboards/
+      - "{{ VICTORIA_METRICS_BASE_DIRECTORY }}Monitoring/Grafana/:/etc/grafana/"
+      - "{{ VICTORIA_METRICS_BASE_DIRECTORY }}Monitoring/Grafana/provisioning/dashboards/:/var/lib/grafana/provisioning/dashboards/"
 
 
 
@@ -197,9 +196,8 @@
       - 8880:8880
     volumes:
       - vmagentdata:/vmagentdata
-      - /root/monitoring/Prometheus/Alert_Rules:/etc/alerts/
-      - /root/monitoring/Prometheus/:/etc/prometheus/
-
+      - "{{ VICTORIA_METRICS_BASE_DIRECTORY }}Monitoring/Prometheus/Alert_Rules:/etc/alerts/"
+      - "{{ VICTORIA_METRICS_BASE_DIRECTORY }}Monitoring/Prometheus/:/etc/prometheus/"
     command:
       - "--datasource.url=http://localhost:8428/"
       - "--remoteRead.url=http://localhost:8428/"
@@ -215,14 +213,13 @@
     name: alertmanager
     state: started
     restart: true
-
     image: prom/alertmanager:{{ alertmanager_version }}
     restart_policy: unless-stopped
     published_ports:
       - 9093:9093
     volumes:
       - vmagentdata:/vmagentdata
-      - /root/monitoring/Alertmanager/alertmanager.yaml:/etc/alertmanager/alertmanager.yaml
+      - "{{ VICTORIA_METRICS_BASE_DIRECTORY }}Monitoring/Alertmanager/alertmanager.yaml:/etc/alertmanager/alertmanager.yaml"
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yaml'
     network_mode: host
