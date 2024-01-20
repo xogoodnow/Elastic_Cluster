@@ -6,42 +6,42 @@
 
 - name: Copy the certs to the nodes
   copy:
-    src: "{{ item }}"
-    dest: /root/elastic_data/config/certs/
+    src: "files/{{ item }}"
+    dest: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/Certs/"
   with_items:
-    - "files/certs.zip"
-    - "files/ca.zip"
-    - "files/http_ca.crt"
-    - "files/http.p12"
-    - "files/transport.p12"
-    - "files/instances.yaml"
+    - "certs.zip"
+    - "ca.zip"
+    - "http_ca.crt"
+    - "http.p12"
+    - "transport.p12"
+    - "instances.yaml"
 
 
 - name: Unzip the certs
   unarchive:
-    src: "{{ item }}"
+    src: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/Certs/{{ item }}"
     remote_src: true
-    dest: /root/elastic_data/config/certs/
+    dest: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/Certs/"
   with_items:
-    - "/root/elastic_data/config/certs/certs.zip"
-    - "/root/elastic_data/config/certs/ca.zip"
+    - "certs.zip"
+    - "ca.zip"
 
 
 - name: Set the docker compose file for each elastic instance
   template:
     src: templates/docker-compose.yaml.j2
-    dest: "/root/elastic_data/docker-compose.yml"
+    dest: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Docker/docker-compose.yml"
 
 
 - name: Set the config file for each elastic instance
   template:
     src: templates/elasticsearch.yml.j2
-    dest: "/root/elastic_data/config/elasticsearch.yml"
+    dest: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/elasticsearch.yml"
 
 -
 - name: Run the containers
   community.general.docker_compose:
-    project_src: /root/elastic_data/
+    project_src: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Docker/"
     pull: true
     recreate: never
     state: present
