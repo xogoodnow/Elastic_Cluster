@@ -1,10 +1,10 @@
 version: "3.8"
 services:
   elasticsearch_exporter:
-    container_name: elasticsearch_exporter
+    container_name: elasticsearch_exporter-{{ ansible_play_hosts_all.index(inventory_hostname) +1 }}
     image: "quay.io/prometheuscommunity/elasticsearch-exporter:{{ elasticsearch_exporter_version }}"
     command:
-      - '--es.uri=https://{{ monitoring_user }}:{{ monitoring_password }}@elastic-{{ ansible_play_hosts_all.index(inventory_hostname) }}-public:9200'
+      - '--es.uri=https://{{ monitoring_user }}:{{ monitoring_password }}@elastic-{{ ansible_play_hosts_all.index(inventory_hostname) +1 }}-public:9200'
       - '--collector.clustersettings'
       - '--es.indices'
       - '--es.indices_settings'
