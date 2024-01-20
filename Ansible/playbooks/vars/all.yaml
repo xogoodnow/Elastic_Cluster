@@ -20,3 +20,4 @@ snapshot_bucket_secret_key: "<secret_key>"   #Put the value in double quotes
 snapshot_s3_endpoint: "<s3_endpoint>"        #Put the value in double quotes
 snapshot_registry_name: <registry_name>
 snapshot_policy_name: <policy_name>
+ELASTICSEARCH_CLUSTER_NAME: elasticsearch-production
