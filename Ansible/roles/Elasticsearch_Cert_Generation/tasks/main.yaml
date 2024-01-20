@@ -4,18 +4,6 @@
     data: alive
 
 
-- name: Create the required directory
-  file:
-    path: "{{ item }}"
-    state: directory
-    owner: root
-    group: root
-    mode: "0777"
-  with_items:
-    - /root/elastic_certs/
-    - /root/elastic_certs/config/
-    - /root/elastic_certs/config/certs
-
 
 
 - name: Pull the elastic image

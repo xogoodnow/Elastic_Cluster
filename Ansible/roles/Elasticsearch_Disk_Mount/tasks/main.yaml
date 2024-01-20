@@ -4,18 +4,6 @@
     data: alive
 
 
-- name: Create the required directory
-  file:
-    path: "{{ item }}"
-    state: directory
-    owner: root
-    group: root
-    mode: "0777"
-  with_items:
-    - /root/elastic_data/
-    - /root/elastic_data/data
-
-
 - name: Extract the UUID of the additional disk
   shell:
     cmd: blkid -o full | grep "{{ Disk_Attach_Path }}1" | awk -F '"' '{print $2}'

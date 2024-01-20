@@ -3,13 +3,7 @@
   ping:
     data: alive
 
-- name: Create the required directories
-  file:
-    mode: 0777
-    path: /root/monitoring/
-    owner: root
-    group: root
-    state: directory
+
 
 - name: Set the docker compose file for each elastic instance
   template:

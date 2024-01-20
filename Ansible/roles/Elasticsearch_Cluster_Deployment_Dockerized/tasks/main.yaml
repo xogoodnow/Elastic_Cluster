@@ -4,21 +4,6 @@
     data: alive
 
 
-- name: Create the required directory
-  file:
-    path: "{{ item }}"
-    state: directory
-    owner: root
-    group: root
-    mode: "0777"
-  with_items:
-    - /root/elastic_data/
-    - /root/elastic_data/config/
-    - /root/elastic_data/config/certs
-    - /root/elastic_data/data
-    - /root/elastic_data/kibana_data
-
-
 - name: Copy the certs to the nodes
   copy:
     src: "{{ item }}"

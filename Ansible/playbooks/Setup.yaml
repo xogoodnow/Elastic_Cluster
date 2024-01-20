@@ -69,7 +69,7 @@
       include_role:
         name: "{{ item }}"
       with_items:
-        - $PWD/roles/Elastic_Setup_Dockerized
+        - $PWD/roles/Elasticsearch_Cluster_Deployment_Dockerized
       when: mode == 'elastic'
 
     - name: Pause for 30 seconds before creating the users
