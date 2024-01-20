@@ -5,7 +5,7 @@
 
 - name: Installing s3-repo module on elastic
   community.docker.docker_container_exec:
-    container: "elastic-{{ ansible_play_hosts_all.index(inventory_hostname) }}"
+    container: "elastic-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}"
     command: bin/elasticsearch-plugin install repository-s3
   register: result_module_enable
 
@@ -15,8 +15,8 @@
 
 - name: Add secret key to the elastic node
   community.docker.docker_container_exec:
-    container: "elastic-{{ ansible_play_hosts_all.index(inventory_hostname) }}"
-    command: echo "{{ snapshot_bucket_access_key }}" | bin/elasticsearch-keystore add s3.client.default.access_key --stdin
+    container: "elastic-{{ ansible_play_hosts_all.index(inventory_hostname) + 1}}"
+    command: echo "{{ SNAPSHOT_BUCKET_ACCESS_KEY }}" | bin/elasticsearch-keystore add s3.client.default.access_key --stdin
   register: set_access_key
 
 - name: show access key
@@ -25,8 +25,8 @@
 
 - name: Add secret key to the elastic node
   community.docker.docker_container_exec:
-    container: "elastic-{{ ansible_play_hosts_all.index(inventory_hostname) }}"
-    command: echo "{{ snapshot_bucket_secret_key }}" | bin/elasticsearch-keystore add s3.client.default.secret_key --stdin
+    container: "elastic-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}"
+    command: echo "{{ SNAPSHOT_BUCKET_SECRET_KEY }}" | bin/elasticsearch-keystore add s3.client.default.secret_key --stdin
   register: set_secret_key
 
 - name: show secret key
@@ -35,7 +35,7 @@
 
 - name: Restart elastic
   docker_container:
-    name: "elastic-{{ ansible_play_hosts_all.index(inventory_hostname) }}"
+    name: "elastic-{{ ansible_play_hosts_all.index(inventory_hostname) + 1}}"
     restart: true
 
 - name: Pause for the node to be ready
