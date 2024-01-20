@@ -17,28 +17,28 @@
         - $PWD/roles/Install_Docker
         - $PWD/roles/Node_Exporter
 
-    - name: Setting up the additional disks
+    - name: setting up the additional disks
       include_role:
         name: "{{ item }}"
       with_items:
-        - $PWD/roles/Additional_Disk_Partitioning
-        - $PWD/roles/Additional_Disk_Mount
+        - $PWD/roles/Elasticsearch_Disk_Partitioning
+        - $PWD/roles/Elasticsearch_Disk_Mount
       when: mode == 'elastic'
 
-    - name: Tuning the nodes for elastic
+    - name: Tuning the nodes for Elasticsearch
       include_role:
         name: "{{ item }}"
       with_items:
-        - $PWD/roles/Elastic_Pre_Setup
+        - $PWD/roles/Elasticsearch_Pre_Setup
       when: mode == 'elastic'
 
 
 
-    - name: Generate required certificates for elastic
+    - name: Generate required certificates for Elasticsearch
       include_role:
         name: "{{ item }}"
       with_items:
-        - $PWD/roles/Cert_Generation_Elastic
+        - $PWD/roles/Elasticsearch_Cert_Generation
       when: mode == 'elastic' and init_cluster == 'true'
 
 
@@ -121,7 +121,7 @@
       include_role:
         name: "{{ item }}"
       with_items:
-        - $PWD/roles/Elastic_Exporter
+        - $PWD/roles/Elasticsearch_Deploy_Exporter_Dockerized
       when: mode == 'elastic'
 
 - name: Backing up elastic
