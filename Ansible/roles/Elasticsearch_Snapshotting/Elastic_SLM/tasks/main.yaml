@@ -5,15 +5,15 @@
 
 - name: Create Elasticsearch SLM Policy
   uri:
-    url: "https://{{ ansible_host }}:9200/_slm/policy/{{ snapshot_policy_name }}"
+    url: "https://{{ ansible_host }}:9200/_slm/policy/{{ SNAPSHOT_POLICY_NAME }}"
     method: PUT
     user: "elastic"
-    password: "{{ elastic_password }}"
+    password: "{{ ELASTIC_PASSWORD }}"
     body: >
       {
         "schedule": "0 30 1 * * ?",  # Run at 01:30 every day
-        "name": "{{ snapshot_policy_name }}", 
-        "repository": "{{ snapshot_registry_name }}", 
+        "name": "{{ SNAPSHOT_POLICY_NAME }}", 
+        "repository": "{{ SNAPSHOT_REGISTRY_NAME }}", 
         "config": { 
           "indices": ["*"],  # Include all indices and data streams
           "include_global_state": true,  # Include global cluster state
