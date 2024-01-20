@@ -21,3 +21,4 @@ snapshot_s3_endpoint: "<s3_endpoint>"        #Put the value in double quotes
 snapshot_registry_name: <registry_name>
 snapshot_policy_name: <policy_name>
 ELASTICSEARCH_CLUSTER_NAME: elasticsearch-production
+ELASTICSEARCH_BASE_DIRECTORY: /root/
