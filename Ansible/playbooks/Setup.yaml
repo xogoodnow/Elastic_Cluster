@@ -43,6 +43,8 @@
 
 
     - name: Set up the monitoring stack
+
+
       include_role:
         name: "{{ item }}"
       with_items:
