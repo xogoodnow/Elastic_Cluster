@@ -6,14 +6,14 @@
 
 - name: Remove partition number 1
   community.general.parted:
-    device: "{{ Disk_Attach_Path }}"
+    device: "{{ DISK_ATTACH_PATH }}"
     number: 1
     state: absent
 
 
 - name: Create a new primary partition
   community.general.parted:
-    device: "{{ Disk_Attach_Path }}"
+    device: "{{ DISK_ATTACH_PATH }}"
     number: 1
     state: present
     fs_type: ext4
@@ -22,14 +22,14 @@
     label: "gpt"
 
 - name: Read device information (always use unit when probing)
-  community.general.parted: device="{{ Disk_Attach_Path }}1" unit=MiB
+  community.general.parted: device="{{ DISK_ATTACH_PATH }}1" unit=MiB
   register: disk_info
 
 - name: Print out the disk info
   debug:
     var: disk_info
 
-- name: Create a ext4 filesystem on "{{ Disk_Attach_Path }}"
+- name: Create a ext4 filesystem on "{{ DISK_ATTACH_PATH }}"
   community.general.filesystem:
     fstype: "ext4"
     dev: "{{ Disk_Attach_Path }}1"
