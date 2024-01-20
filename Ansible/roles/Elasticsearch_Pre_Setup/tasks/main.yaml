@@ -16,3 +16,27 @@
   with_items:
     - { name: "vm.max_map_count", value: '262144' }
 
+
+
+- name: Create the required directories
+  file:
+    path: "{{ ELASTICSEARCH_BASE_DIRECTORY }}{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0777"
+  with_items:
+    - Elasticsearch/
+    - Elasticsearch/Docker
+    - Elasticsearch/Elasticsearch_Data/
+    - Elasticsearch/Config/
+    - Elasticsearch/Config/Certs
+    - Elasticsearch/Kibana
+    - Elasticsearch/Kibana/Docker
+    - Elasticsearch/Kibana/Kibana_Data
+    - Elasticsearch/Monitoring
+    - Elasticsearch/Monitoring/Elasticsearch_Exporter
+    - Elasticsearch/Monitoring/Elasticsearch_Exporter/Docker
+
+
+
