@@ -12,7 +12,7 @@
 
 - name: Mount up device by UUID
   ansible.posix.mount:
-    path: /root/elastic_data/data
+    path: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Elasticsearch_Data/"
     src: "UUID={{ disk_uuid.stdout }}"
     fstype: ext4
     boot: true
