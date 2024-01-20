@@ -1,9 +1,9 @@
-cluster.name: elasticsearch
+cluster.name: "{{ ELASTICSEARCH_CLUSTER_NAME }}"
 
 # https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-network.html
 network.host: 0.0.0.0
-http.host: elastic-{{ ansible_play_hosts_all.index(inventory_hostname) }}-public
-transport.host: elastic-{{ ansible_play_hosts_all.index(inventory_hostname) }}
+http.host: elastic-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}-public
+transport.host: elastic-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}
 
 
 # https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-node.html
@@ -13,35 +13,35 @@ path.data:  /var/elasticsearch/data
 
 
 
-node.name: elastic-{{ ansible_play_hosts_all.index(inventory_hostname) }}
+node.name: elastic-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}
 
-cluster.initial_master_nodes: elastic-0,elastic-1,elastic-2
+cluster.initial_master_nodes: elastic-1,elastic-2,elastic-3
 
 
 
 {% set host_index = ansible_play_hosts_all.index(inventory_hostname) %}
 {% if host_index == 0 %}
 # https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-discovery-settings.html
-discovery.seed_hosts: elastic-1,elastic-2
+discovery.seed_hosts: elastic-2,elastic-3
 
 {% elif host_index == 1 %}
 # https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-discovery-settings.html
-discovery.seed_hosts: elastic-0,elastic-2
+discovery.seed_hosts: elastic-1,elastic-3
 
 {% elif host_index == 2 %}
 # https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-discovery-settings.html
-discovery.seed_hosts: elastic-0,elastic-1
+discovery.seed_hosts: elastic-1,elastic-2
 {% endif %}
 # https://www.elastic.co/guide/en/elasticsearch/reference/current/security-settings.html
 xpack.security.enrollment.enabled: true
 xpack.security.enabled: true
 xpack.security.http.ssl.enabled: true
-xpack.security.http.ssl.key: /usr/share/elasticsearch/config/certs/elastic-{{host_index}}/elastic-{{host_index}}.key
-xpack.security.http.ssl.certificate: /usr/share/elasticsearch/config/certs/elastic-{{host_index}}/elastic-{{host_index}}.crt
+xpack.security.http.ssl.key: /usr/share/elasticsearch/config/certs/elastic-{{host_index + 1 }}/elastic-{{host_index + 1}}.key
+xpack.security.http.ssl.certificate: /usr/share/elasticsearch/config/certs/elastic-{{host_index + 1}}/elastic-{{host_index + 1}}.crt
 xpack.security.http.ssl.certificate_authorities: /usr/share/elasticsearch/config/certs/ca/ca.crt
 xpack.security.transport.ssl.enabled: true
-xpack.security.transport.ssl.key: /usr/share/elasticsearch/config/certs/elastic-{{host_index}}/elastic-{{host_index}}.key
-xpack.security.transport.ssl.certificate: /usr/share/elasticsearch/config/certs/elastic-{{host_index}}/elastic-{{host_index}}.crt
+xpack.security.transport.ssl.key: /usr/share/elasticsearch/config/certs/elastic-{{host_index + 1}}/elastic-{{host_index + 1}}.key
+xpack.security.transport.ssl.certificate: /usr/share/elasticsearch/config/certs/elastic-{{host_index + 1}}/elastic-{{host_index + 1}}.crt
 xpack.security.transport.ssl.certificate_authorities: /usr/share/elasticsearch/config/certs/ca/ca.crt
 xpack.security.transport.ssl.verification_mode: certificate
 xpack.license.self_generated.type: basic
