@@ -10,8 +10,7 @@
 
 - name: pull the required image for Node Exporter
   docker_image:
-    name: prom/node-exporter
-    tag: "{{ NODE_EXPORTER_VERSION }}"
+    name: "{{ NODE_EXPORTER_BASE_IMAGE }}:{{ NODE_EXPORTER_VERSION }}"
     source: pull
 
 - name: Check if container with the same name exists
