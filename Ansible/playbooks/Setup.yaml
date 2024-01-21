@@ -81,8 +81,8 @@
         url: "https://{{ ansible_host }}:9200/_security/user/kibana_system/_password"
         method: POST
         user: "elastic"
-        password: "{{ elastic_password }}"
-        body: '{"password": "{{ kibana_password }}"}'
+        password: "{{ ELASTIC_PASSWORD }}"
+        body: '{"password": "{{ KIBANA_PASSWORD }}"}'
         body_format: json
         validate_certs: false
         force_basic_auth: true
@@ -94,11 +94,11 @@
 
     - name: Set password for monitoring user
       uri:
-        url: "https://{{ ansible_host }}:9200/_security/user/{{ monitoring_user }}"
+        url: "https://{{ ansible_host }}:9200/_security/user/{{ MONITORING_USER }}"
         method: POST
         user: "elastic"
-        password: "{{ elastic_password }}"
-        body: '{"password": "{{ monitoring_password }}","roles" : [ "superuser" ]}'
+        password: "{{ MONITORING_PASSWORD }}"
+        body: '{"password": "{{ MONITORING_PASSWORD }}","roles" : [ "superuser" ]}'
         body_format: json
         validate_certs: false
         force_basic_auth: true
