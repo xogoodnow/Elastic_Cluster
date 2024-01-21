@@ -5,6 +5,7 @@ GRAFANA_VERSION: latest
 VMALERT_VERSION: latest
 ALERTMANAGER_VERSION: latest
 NODE_EXPORTER_VERSION: latest
+NODE_EXPORTER_BASE_IMAGE: prom/node-exporter
 ELASTICSEARCH_EXPORTER_VERSION: v1.6.0
 ELASTIC_EXPORTER_BASE_IMAGE: quay.io/prometheuscommunity/elasticsearch-exporter
 MONITORING_USER: monitoring
