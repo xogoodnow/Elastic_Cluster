@@ -80,16 +80,23 @@
 
 - name: Copy generated files to the intended directory
   ansible.builtin.copy:
-    src: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/certs"
-    dest: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/Certs"
-
+    src: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/certs/{{ item }}"
+    dest: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/Certs/"
+    remote_src: yes
+  with_items:
+    - "certs.zip"
+    - "ca.zip"
+    - "http_ca.crt"
+    - "http.p12"
+    - "transport.p12"
+#    - "instances.yaml"
 
 - name: Delete the previous certs directory
   ansible.builtin.file:
     path: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/certs"
     state: absent
     force: true
-    recurse: true
+    #recurse: true
 
 
 
