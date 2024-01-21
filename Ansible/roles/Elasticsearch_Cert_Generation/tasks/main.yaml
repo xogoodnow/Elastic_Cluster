@@ -78,6 +78,21 @@
     var: result
 
 
+- name: Copy generated files to the intended directory
+  ansible.builtin.copy:
+    src: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/certs"
+    dest: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/Certs"
+
+
+- name: Delete the previous certs directory
+  ansible.builtin.file:
+    path: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/certs"
+    state: absent
+    force: true
+    recurse: true
+
+
+
 - name: Fetch the certs
   fetch:
     src: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/Certs/{{ item }}"
