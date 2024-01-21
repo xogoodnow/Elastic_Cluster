@@ -32,5 +32,5 @@
 - name: Create a ext4 filesystem on "{{ DISK_ATTACH_PATH }}"
   community.general.filesystem:
     fstype: "ext4"
-    dev: "{{ Disk_Attach_Path }}1"
+    dev: "{{ DISK_ATTACH_PATH }}1"
     force: true
