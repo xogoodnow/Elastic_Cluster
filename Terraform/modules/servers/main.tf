@@ -73,7 +73,7 @@ resource "local_file" "instances" {
       monitoring_ips = hcloud_server.monitoring.*.ipv4_address
     }
   )
-  filename = "${path.module}/../../../Ansible/roles/Cert_Generation_Elastic/files/instances.yaml"
+  filename = "${path.module}/../../../Ansible/roles/Elasticsearch_Cert_Generation/files/instances.yaml"
 }
 
 
