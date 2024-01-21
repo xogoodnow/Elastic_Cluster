@@ -8,7 +8,7 @@
 
 - name: Pull the elastic image
   docker_image:
-    name: {{ ELASTIC_BASE_IMAGE }}:{{ ELASTIC_VERSION }}
+    name: "{{ ELASTIC_BASE_IMAGE }}:{{ ELASTIC_VERSION }}"
     source: pull
 
 
@@ -25,7 +25,7 @@
 - name: Run the elastic container for cert generation
   docker_container:
     name: "elastic_cert_generator"
-    image: {{ ELASTIC_BASE_IMAGE }}:{{ ELASTIC_VERSION }}
+    image: "{{ ELASTIC_BASE_IMAGE }}:{{ ELASTIC_VERSION }}"
     restart_policy: no
     state: started
     privileged: true
@@ -82,7 +82,7 @@
   fetch:
     src: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/Certs/{{ item }}"
     flat: true
-    dest: $PWD/roles/Elasticsearch_Setup_Dockerized/files/
+    dest: $PWD/roles/Elasticsearch_Cluster_Deployment_Dockerized/files/
   with_items:
     - "certs.zip"
     - "ca.zip"
