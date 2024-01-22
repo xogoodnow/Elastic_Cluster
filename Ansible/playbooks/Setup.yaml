@@ -97,7 +97,7 @@
         url: "https://{{ ansible_host }}:9200/_security/user/{{ MONITORING_USER }}"
         method: POST
         user: "elastic"
-        password: "{{ MONITORING_PASSWORD }}"
+        password: "{{ ELASTIC_PASSWORD }}"
         body: '{"password": "{{ MONITORING_PASSWORD }}","roles" : [ "superuser" ]}'
         body_format: json
         validate_certs: false
