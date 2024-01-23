@@ -62,7 +62,7 @@ resource "local_file" "etc-hosts" {
 
     }
   )
-  filename = "${path.module}/../../../Ansible/roles/Pre_Setup/files/etchost.yaml"
+  filename = "${path.module}/../../../Ansible/roles/pre_setup/files/etchost.yaml"
 }
 
 
@@ -73,7 +73,7 @@ resource "local_file" "instances" {
       monitoring_ips = hcloud_server.monitoring.*.ipv4_address
     }
   )
-  filename = "${path.module}/../../../Ansible/roles/Elasticsearch_Cert_Generation/files/instances.yaml"
+  filename = "${path.module}/../../../Ansible/roles/elasticsearch_cert_generation/files/instances.yaml"
 }
 
 
