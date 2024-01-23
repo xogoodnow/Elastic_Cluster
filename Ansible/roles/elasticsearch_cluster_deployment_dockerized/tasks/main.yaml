@@ -1,5 +1,5 @@
 ---
-- name: check connectivity
+- name: Check connectivity
   ping:
     data: alive
 
@@ -7,7 +7,7 @@
 - name: Copy the certs to the nodes
   copy:
     src: "files/{{ item }}"
-    dest: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/Certs/"
+    dest: "{{ elasticsearch_base_directory }}Elasticsearch/Config/Certs/"
   with_items:
     - "certs.zip"
     - "ca.zip"
@@ -19,9 +19,9 @@
 
 - name: Unzip the certs
   unarchive:
-    src: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/Certs/{{ item }}"
+    src: "{{ elasticsearch_base_directory }}Elasticsearch/Config/Certs/{{ item }}"
     remote_src: true
-    dest: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/Certs/"
+    dest: "{{ elasticsearch_base_directory }}Elasticsearch/Config/Certs/"
   with_items:
     - "certs.zip"
     - "ca.zip"
@@ -30,18 +30,18 @@
 - name: Set the docker compose file for each elastic instance
   template:
     src: templates/docker-compose.yaml.j2
-    dest: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Docker/docker-compose.yml"
+    dest: "{{ elasticsearch_base_directory }}Elasticsearch/Docker/docker-compose.yml"
 
 
 - name: Set the config file for each elastic instance
   template:
     src: templates/elasticsearch.yml.j2
-    dest: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/elasticsearch.yml"
+    dest: "{{ elasticsearch_base_directory }}Elasticsearch/Config/elasticsearch.yml"
 
--
+
 - name: Run the containers
   community.general.docker_compose:
-    project_src: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Docker/"
+    project_src: "{{ elasticsearch_base_directory }}Elasticsearch/Docker/"
     pull: true
     recreate: never
     state: present

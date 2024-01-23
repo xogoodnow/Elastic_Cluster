@@ -1,10 +1,10 @@
 ---
-- name: check connectivity
+- name: Check connectivity
   ping:
     data: alive
 
 
-- name: update and upgrade system
+- name: Update and upgrade system
   apt:
     update_cache: yes
     upgrade: dist
@@ -12,7 +12,7 @@
 
 - name: Create the required directories
   file:
-    path: "{{ VICTORIA_METRICS_BASE_DIRECTORY }}{{ item }}"
+    path: "{{ victoria_metrics_base_directory }}{{ item }}"
     state: directory
     recurse: true
     mode: 0777
@@ -32,7 +32,7 @@
 - name: Copy alertmanager files
   copy:
     src: files/Alertmanager/alertmanager.yaml
-    dest: "{{ VICTORIA_METRICS_BASE_DIRECTORY }}Monitoring/Alertmanager/"
+    dest: "{{ victoria_metrics_base_directory }}Monitoring/Alertmanager/"
     force: true
     mode: 0777
 
@@ -40,7 +40,7 @@
 - name: Copy Grafana files
   copy:
     src: files/Grafana/grafana.ini
-    dest: "{{ VICTORIA_METRICS_BASE_DIRECTORY }}Monitoring/Grafana/"
+    dest: "{{ victoria_metrics_base_directory }}Monitoring/Grafana/"
     force: true
     mode: 0777
 
@@ -48,7 +48,7 @@
 - name: Copy dashboards files
   copy:
     src: files/Grafana/provisioning/dashboards/{{ item }}
-    dest: "{{ VICTORIA_METRICS_BASE_DIRECTORY }}Monitoring/Grafana/provisioning/dashboards/"
+    dest: "{{ victoria_metrics_base_directory }}Monitoring/Grafana/provisioning/dashboards/"
     force: true
     follow: true
     mode: 0777
@@ -62,7 +62,7 @@
 - name: Copy Prometheus files
   copy:
     src: files/Prometheus/{{ item }}
-    dest: "{{ VICTORIA_METRICS_BASE_DIRECTORY }}Monitoring/Prometheus/"
+    dest: "{{ victoria_metrics_base_directory }}Monitoring/Prometheus/"
     force: true
     follow: true
     mode: 0777
@@ -76,12 +76,12 @@
     name: "{{ item}}"
     source: pull
   with_items:
-    - prom/node-exporter:{{ NODE_EXPORTER_VERSION }}
-    - victoriametrics/vmagent:{{ VMAGENT_VERSION }}
-    - victoriametrics/victoria-metrics:{{ VICTORIA_METRICS_VERSION }}
-    - grafana/grafana:{{ GRAFANA_VERSION }}
-    - victoriametrics/vmalert:{{ VMALERT_VERSION }}
-    - prom/alertmanager:{{ ALERTMANAGER_VERSION }}
+    - prom/node-exporter:{{ node_exporter_version }}
+    - victoriametrics/vmagent:{{ vmagent_version }}
+    - victoriametrics/victoria-metrics:{{ victoria_metrics_version }}
+    - grafana/grafana:{{ grafana_version }}
+    - victoriametrics/vmalert:{{ vmalert_version }}
+    - prom/alertmanager:{{ alertmanager_version }}
 
 
 - name: Create the required volumes
@@ -97,7 +97,7 @@
 - name: Run the container for Node Exporter
   docker_container:
     name: node-exporter
-    image: prom/node-exporter:{{ NODE_EXPORTER_VERSION }}
+    image: prom/node-exporter:{{ node_exporter_version }}
     restart_policy: unless-stopped
     restart: true
     state: started
@@ -120,14 +120,14 @@
   docker_container:
     name: vmagent
     state: started
-    image: victoriametrics/vmagent:{{ VMAGENT_VERSION }}
+    image: victoriametrics/vmagent:{{ vmagent_version }}
     restart_policy: unless-stopped
     restart: true
     published_ports:
       - 8429:8429
     volumes:
       - vmagentdata:/vmagentdata
-      - "{{ VICTORIA_METRICS_BASE_DIRECTORY }}Monitoring/Prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml"
+      - "{{ victoria_metrics_base_directory }}Monitoring/Prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml"
     command:
       - "--promscrape.config=/etc/prometheus/prometheus.yml"
       - "--remoteWrite.url=http://localhost:8428/api/v1/write"
@@ -141,7 +141,7 @@
     name: victoriametrics
     state: started
     restart: true
-    image: victoriametrics/victoria-metrics:{{ VICTORIA_METRICS_VERSION }}
+    image: victoriametrics/victoria-metrics:{{ victoria_metrics_version }}
     restart_policy: unless-stopped
     published_ports:
       - 8428:8428
@@ -169,14 +169,14 @@
     name: grafana
     state: started
     restart: true
-    image: grafana/grafana:{{ GRAFANA_VERSION }}
+    image: grafana/grafana:{{ grafana_version }}
     restart_policy: unless-stopped
     published_ports:
       - 3000:3000
     volumes:
       - grafana_data:/var/lib/grafana
-      - "{{ VICTORIA_METRICS_BASE_DIRECTORY }}Monitoring/Grafana/:/etc/grafana/"
-      - "{{ VICTORIA_METRICS_BASE_DIRECTORY }}Monitoring/Grafana/provisioning/dashboards/:/var/lib/grafana/provisioning/dashboards/"
+      - "{{ victoria_metrics_base_directory }}Monitoring/Grafana/:/etc/grafana/"
+      - "{{ victoria_metrics_base_directory }}Monitoring/Grafana/provisioning/dashboards/:/var/lib/grafana/provisioning/dashboards/"
 
 
 
@@ -184,7 +184,7 @@
 - name: Run the container for Vmalert
   docker_container:
     name: vmalert
-    image: victoriametrics/vmalert:{{ VMALERT_VERSION }}
+    image: victoriametrics/vmalert:{{ vmalert_version }}
     state: started
     restart: true
     restart_policy: unless-stopped
@@ -193,8 +193,8 @@
       - 8880:8880
     volumes:
       - vmagentdata:/vmagentdata
-      - "{{ VICTORIA_METRICS_BASE_DIRECTORY }}Monitoring/Prometheus/Alert_Rules:/etc/alerts/"
-      - "{{ VICTORIA_METRICS_BASE_DIRECTORY }}Monitoring/Prometheus/:/etc/prometheus/"
+      - "{{ victoria_metrics_base_directory }}Monitoring/Prometheus/Alert_Rules:/etc/alerts/"
+      - "{{ victoria_metrics_base_directory }}Monitoring/Prometheus/:/etc/prometheus/"
     command:
       - "--datasource.url=http://localhost:8428/"
       - "--remoteRead.url=http://localhost:8428/"
@@ -210,7 +210,7 @@
     name: alertmanager
     state: started
     restart: true
-    image: prom/alertmanager:{{ ALERTMANAGER_VERSION }}
+    image: prom/alertmanager:{{ alertmanager_version }}
     restart_policy: unless-stopped
     published_ports:
       - 9093:9093

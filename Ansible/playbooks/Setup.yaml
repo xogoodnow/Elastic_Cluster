@@ -13,23 +13,23 @@
       include_role:
         name: "{{ item }}"
       with_items:
-        - $PWD/roles/Pre_Setup
-        - $PWD/roles/Install_Docker
-        - $PWD/roles/Node_Exporter
+        - $PWD/roles/pre_setup
+        - $PWD/roles/install_docker
+        - $PWD/roles/node_exporter
 
-    - name: setting up the additional disks
+    - name: Setting up the additional disks
       include_role:
         name: "{{ item }}"
       with_items:
-        - $PWD/roles/Elasticsearch_Disk_Partitioning
-        - $PWD/roles/Elasticsearch_Disk_Mount
+        - $PWD/roles/elasticsearch_disk_partitioning
+        - $PWD/roles/elasticsearch_disk_mount
       when: mode == 'elastic'
 
     - name: Tuning the nodes for Elasticsearch
       include_role:
         name: "{{ item }}"
       with_items:
-        - $PWD/roles/Elasticsearch_Pre_Setup
+        - $PWD/roles/elasticsearch_pre_setup
       when: mode == 'elastic'
 
 
@@ -38,7 +38,7 @@
       include_role:
         name: "{{ item }}"
       with_items:
-        - $PWD/roles/Elasticsearch_Cert_Generation
+        - $PWD/roles/elasticsearch_cert_generation
       when: mode == 'elastic' and init_cluster == 'true'
 
 
@@ -48,14 +48,14 @@
       include_role:
         name: "{{ item }}"
       with_items:
-        - $PWD/roles/Victoria_Metrics
+        - $PWD/roles/victoria_metrics
       when: mode == 'monitoring'
 
 
 
 
 
-- name: setting up the Elastic cluster
+- name: Setting up the Elastic cluster
   hosts: all
   become: true
   tasks:
@@ -69,7 +69,7 @@
       include_role:
         name: "{{ item }}"
       with_items:
-        - $PWD/roles/Elasticsearch_Cluster_Deployment_Dockerized
+        - $PWD/roles/elasticsearch_cluster_deployment_dockerized
       when: mode == 'elastic'
 
     - name: Pause for 30 seconds before creating the users
@@ -81,8 +81,8 @@
         url: "https://{{ ansible_host }}:9200/_security/user/kibana_system/_password"
         method: POST
         user: "elastic"
-        password: "{{ ELASTIC_PASSWORD }}"
-        body: '{"password": "{{ KIBANA_PASSWORD }}"}'
+        password: "{{ elastic_password }}"
+        body: '{"password": "{{ kibana_password }}"}'
         body_format: json
         validate_certs: false
         force_basic_auth: true
@@ -94,11 +94,11 @@
 
     - name: Set password for monitoring user
       uri:
-        url: "https://{{ ansible_host }}:9200/_security/user/{{ MONITORING_USER }}"
+        url: "https://{{ ansible_host }}:9200/_security/user/{{ monitoring_user }}"
         method: POST
         user: "elastic"
-        password: "{{ ELASTIC_PASSWORD }}"
-        body: '{"password": "{{ MONITORING_PASSWORD }}","roles" : [ "superuser" ]}'
+        password: "{{ elastic_password }}"
+        body: '{"password": "{{ monitoring_password }}","roles" : [ "superuser" ]}'
         body_format: json
         validate_certs: false
         force_basic_auth: true
@@ -121,7 +121,7 @@
       include_role:
         name: "{{ item }}"
       with_items:
-        - $PWD/roles/Elasticsearch_Deploy_Exporter_Dockerized
+        - $PWD/roles/elasticsearch_deploy_exporter_dockerized
       when: mode == 'elastic'
 
 - name: Backing up elastic
@@ -139,7 +139,7 @@
       include_role:
         name: "{{ item }}"
       with_items:
-        - $PWD/roles/Elastic_Snapshotting/Elastic_Enable_Snapshotting
+        - $PWD/roles/Elastic_Snapshotting/elastic_enable_snapshotting
       when: mode == 'elastic'
 
 
@@ -159,7 +159,7 @@
       include_role:
         name: "{{ item }}"
       with_items:
-        - $PWD/roles/Elastic_Snapshotting/Elastic_Register_Repository
+        - $PWD/roles/elastic_snapshotting/elastic_register_repository
       when: mode == 'elastic' and init_cluster == 'true'
 
 
@@ -167,5 +167,5 @@
       include_role:
         name: "{{ item }}"
       with_items:
-        - $PWD/roles/Elastic_Snapshotting/Elastic_SLM
+        - $PWD/roles/elastic_snapshotting/elastic_slm
       when: mode == 'elastic' and init_cluster == 'true'

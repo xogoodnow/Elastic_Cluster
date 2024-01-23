@@ -1,5 +1,5 @@
 ---
-- name: check connectivity
+- name: Check connectivity
   ping:
     data: alive
 
@@ -8,14 +8,14 @@
 
 - name: Pull the elastic image
   docker_image:
-    name: "{{ ELASTIC_BASE_IMAGE }}:{{ ELASTIC_VERSION }}"
+    name: "{{ elastic_base_image }}:{{ elastic_version }}"
     source: pull
 
 
 - name: Copy Instances file for bulk certificate generation
   template:
     src: files/instances.yaml
-    dest: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/Certs/instances.yaml"
+    dest: "{{ elasticsearch_base_directory }}Elasticsearch/Config/Certs/instances.yaml"
     owner: root
     group: root
     mode: '0644'
@@ -25,13 +25,13 @@
 - name: Run the elastic container for cert generation
   docker_container:
     name: "elastic_cert_generator"
-    image: "{{ ELASTIC_BASE_IMAGE }}:{{ ELASTIC_VERSION }}"
+    image: "{{ elastic_base_image }}:{{ elastic_version }}"
     restart_policy: no
     state: started
     privileged: true
     network_mode: host
     volumes:
-      - "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/Certs/instances.yaml:/usr/share/elasticsearch/instances.yaml"
+      - "{{ elasticsearch_base_directory }}Elasticsearch/Config/Certs/instances.yaml:/usr/share/elasticsearch/instances.yaml"
 
 - name: Sleep for 30s so the elastic would be ready
   pause:
@@ -69,7 +69,7 @@
 
 - name: Extract the certificates
   shell:
-    cmd: "docker cp elastic_cert_generator:/usr/share/elasticsearch/config/certs {{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/"
+    cmd: "docker cp elastic_cert_generator:/usr/share/elasticsearch/config/certs {{ elasticsearch_base_directory }}Elasticsearch/Config/"
   register: result
 
 
@@ -80,8 +80,8 @@
 
 - name: Copy generated files to the intended directory
   ansible.builtin.copy:
-    src: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/certs/{{ item }}"
-    dest: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/Certs/"
+    src: "{{ elasticsearch_base_directory }}Elasticsearch/Config/certs/{{ item }}"
+    dest: "{{ elasticsearch_base_directory }}Elasticsearch/Config/Certs/"
     remote_src: yes
   with_items:
     - "certs.zip"
@@ -93,7 +93,7 @@
 
 - name: Delete the previous certs directory
   ansible.builtin.file:
-    path: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/certs"
+    path: "{{ elasticsearch_base_directory }}Elasticsearch/Config/certs"
     state: absent
     force: true
     #recurse: true
@@ -102,9 +102,9 @@
 
 - name: Fetch the certs
   fetch:
-    src: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/Certs/{{ item }}"
+    src: "{{ elasticsearch_base_directory }}Elasticsearch/Config/Certs/{{ item }}"
     flat: true
-    dest: $PWD/roles/Elasticsearch_Cluster_Deployment_Dockerized/files/
+    dest: $PWD/roles/elasticsearch_cluster_deployment_dockerized/files/
   with_items:
     - "certs.zip"
     - "ca.zip"

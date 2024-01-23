@@ -1,20 +1,20 @@
 ---
-- name: check connectivity
+- name: Check connectivity
   ping:
     data: alive
 
-- name: Create Elasticsearch S3 Snapshot Repository
+- name: Create elasticsearch s3 snapshot repository
   uri:
-    url: "https://{{ ansible_host }}:9200/_snapshot/{{ SNAPSHOT_REGISTRY_NAME }}"
+    url: "https://{{ ansible_host }}:9200/_snapshot/{{ snapshot_registry_name }}"
     method: PUT
     user: "elastic"
-    password: "{{ ELASTIC_PASSWORD }}"
+    password: "{{ elastic_password }}"
     body: >
       {
         "type": "s3",
         "settings": {
-          "bucket": "{{ SNAPSHOT_BUCKET_NAME }}",
-          "endpoint": "{{ SNAPSHOT_S3_ENDPOINT }}"
+          "bucket": "{{ snapshot_bucket_name }}",
+          "endpoint": "{{ snapshot_s3_endpoint }}"
         }
       }
     body_format: json

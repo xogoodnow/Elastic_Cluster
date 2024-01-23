@@ -3,13 +3,13 @@ version: "3.8"
 services:
   elastic-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}:
     container_name: elastic-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}
-    image: "{{ ELASTIC_BASE_IMAGE }}:{{ ELASTIC_VERSION }}"
+    image: "{{ elastic_base_image }}:{{ elastic_version }}"
     volumes:
-      - "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/Certs:/usr/share/elasticsearch/config/certs"
-      - "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Elasticsearch_Data/:/var/elasticsearch/data"
-      - "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml"
+      - "{{ elasticsearch_base_directory }}Elasticsearch/Config/Certs:/usr/share/elasticsearch/config/certs"
+      - "{{ elasticsearch_base_directory }}Elasticsearch/Elasticsearch_Data/:/var/elasticsearch/data"
+      - "{{ elasticsearch_base_directory }}Elasticsearch/Config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml"
     environment:
-      - ELASTIC_PASSWORD={{ ELASTIC_PASSWORD }}
+      - ELASTIC_PASSWORD={{ elastic_password }}
     network_mode: host
     logging:
       driver: json-file
@@ -31,17 +31,17 @@ services:
 
   kibana-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}:
     container_name:  kibana-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}
-    image: "{{ KIBANA_BASE_IMAGE }}:{{ KIBANA_VERSION }}"
+    image: "{{ kibana_base_image }}:{{ kibana_version }}"
     volumes:
-      - "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Config/Certs:/usr/share/kibana/config/certs"
-      - "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Kibana/Kibana_Data:/usr/share/kibana/data"
+      - "{{ elasticsearch_base_directory }}Elasticsearch/Config/Certs:/usr/share/kibana/config/certs"
+      - "{{ elasticsearch_base_directory }}Elasticsearch/Kibana/Kibana_Data:/usr/share/kibana/data"
 
     network_mode: host
     environment:
       - SERVERNAME=kibana
       - ELASTICSEARCH_HOSTS=https://elastic-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}-public:9200
-      - ELASTICSEARCH_USERNAME={{ KIBANA_SYSTEM_USERNAME }}
-      - ELASTICSEARCH_PASSWORD={{ KIBANA_PASSWORD }}
+      - ELASTICSEARCH_USERNAME={{ kibana_system_username }}
+      - ELASTICSEARCH_PASSWORD={{ kibana_password }}
       - ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=/usr/share/kibana/config/certs/ca/ca.crt
     healthcheck:
       test:

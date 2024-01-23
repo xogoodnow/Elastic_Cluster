@@ -1,3 +1,8 @@
+---
+- name: Check connectivity
+  ping:
+    data: alive
+
 - name: Increasing the vm.max_map_count on elastic nodes
   lineinfile:
     path: /etc/sysctl.conf
@@ -20,7 +25,7 @@
 
 - name: Create the required directories
   file:
-    path: "{{ ELASTICSEARCH_BASE_DIRECTORY }}{{ item }}"
+    path: "{{ elasticsearch_base_directory }}{{ item }}"
     state: directory
     owner: root
     group: root

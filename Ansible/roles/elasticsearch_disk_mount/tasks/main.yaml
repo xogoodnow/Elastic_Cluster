@@ -1,18 +1,18 @@
 ---
-- name: check connectivity
+- name: Check connectivity
   ping:
     data: alive
 
 
 - name: Extract the UUID of the additional disk
   shell:
-    cmd: blkid -o full | grep "{{ DISK_ATTACH_PATH }}1" | awk -F '"' '{print $2}'
+    cmd: blkid -o full | grep "{{ disk_attach_path }}1" | awk -F '"' '{print $2}'
   register: disk_uuid
   changed_when: false
 
 - name: Mount up device by UUID
   ansible.posix.mount:
-    path: "{{ ELASTICSEARCH_BASE_DIRECTORY }}Elasticsearch/Elasticsearch_Data/"
+    path: "{{ elasticsearch_base_directory }}Elasticsearch/Elasticsearch_Data/"
     src: "UUID={{ disk_uuid.stdout }}"
     fstype: ext4
     boot: true

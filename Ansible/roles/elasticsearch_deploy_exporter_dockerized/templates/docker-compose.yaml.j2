@@ -2,9 +2,9 @@ version: "3.8"
 services:
   elasticsearch_exporter:
     container_name: elasticsearch_exporter-{{ ansible_play_hosts_all.index(inventory_hostname) +1 }}
-    image: "{{ ELASTIC_EXPORTER_BASE_IMAGE }}:{{ ELASTICSEARCH_EXPORTER_VERSION }}"
+    image: "{{ elastic_exporter_base_image }}:{{ elasticsearch_exporter_version }}"
     command:
-      - '--es.uri=https://{{ MONITORING_USER }}:{{ MONITORING_PASSWORD }}@elastic-{{ ansible_play_hosts_all.index(inventory_hostname) +1 }}-public:9200'
+      - '--es.uri=https://{{ monitoring_user }}:{{ monitoring_password }}@elastic-{{ ansible_play_hosts_all.index(inventory_hostname) +1 }}-public:9200'
       - '--collector.clustersettings'
       - '--es.indices'
       - '--es.indices_settings'

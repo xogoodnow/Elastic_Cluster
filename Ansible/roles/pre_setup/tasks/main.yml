@@ -1,17 +1,17 @@
 ---
-- name: check connectivity
+- name: Check connectivity
   ping:
     data: alive
 
 
-- name: update and upgrade system
+- name: Update and upgrade system
   apt:
     update_cache: yes
     upgrade: dist
     #force: true
 
 
-- name: install some base packages
+- name: Install some base packages
   apt:
     pkg:
       - net-tools
@@ -46,21 +46,21 @@
 
 
 
-- name: set resolve conf config
+- name: Set resolve conf config
   copy:
     dest: /etc/resolvconf/resolv.conf.d/head
     content: |
-      nameserver {{ NAME_SERVER }}
+      nameserver {{ name_server }}
 
 
-- name: edit resolv.conf file
+- name: Edit resolv.conf file
   copy:
     dest: /etc/resolv.conf
     content: |
-      nameserver {{ NAME_SERVER }}
+      nameserver {{ name_server }}
 
 
-- name: enable resolvconf service
+- name: Enable resolvconf service
   systemd:
     name: resolvconf
     state: started
