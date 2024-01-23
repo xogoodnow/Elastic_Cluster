@@ -139,7 +139,7 @@
       include_role:
         name: "{{ item }}"
       with_items:
-        - $PWD/roles/Elastic_Snapshotting/elastic_enable_snapshotting
+        - $PWD/roles/elastic_snapshotting/elastic_enable_snapshotting
       when: mode == 'elastic'
 
 
