@@ -22,12 +22,14 @@ services:
       test:
         [
           "CMD-SHELL",
-          "curl -s --cacert /usr/share/elasticsearch/config/certs/ca/ca.crt https://localhost:9200 | grep -q 'missing authentication credentials'",
+          "curl -s -k https://localhost:9200 | grep -q 'missing authentication credentials'",
         ]
       interval: 10s
       timeout: 10s
       retries: 120
-
+    mem_limit: "{{ elasticsearch_memory_limit }}"
+    cpus: "{{ elasticsearch_cpu_limit }}"
+  
   kibana-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}:
     container_name:  kibana-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}
     image: "{{ kibana_base_image }}:{{ kibana_version }}"
@@ -59,3 +61,7 @@ services:
       driver: json-file
       options:
         max-size: "{{ elasticsearch_max_kibana }}"
+    mem_limit: "{{ kibana_memory_limit }}"
+    cpus: "{{ kibana_cpu_limit }}"
+
+
