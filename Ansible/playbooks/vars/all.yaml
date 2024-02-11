@@ -28,4 +28,5 @@ snapshot_policy_name: "<policy_name>"
 elasticsearch_cluster_name: "elasticsearch-production"
 elasticsearch_base_directory: "/root/"
 victoria_metrics_base_directory: "/root/"
+elasticsearch_max_log_size: "20g"
 

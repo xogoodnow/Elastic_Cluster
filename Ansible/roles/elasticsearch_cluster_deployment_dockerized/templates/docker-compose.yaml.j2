@@ -14,7 +14,7 @@ services:
     logging:
       driver: json-file
       options:
-        max-size: "20g"
+        max-size: "{{ elasticsearch_max_log_size }}"
     ulimits:
       memlock:
         soft: -1
