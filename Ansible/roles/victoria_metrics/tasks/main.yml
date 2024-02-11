@@ -57,6 +57,7 @@
     - 4358_aux.json
     - 14191_main.json
     - dashboards.yaml
+    - General_Elasticsearch_Monitoring_Dashboard.json
 
 
 - name: Copy Prometheus files
