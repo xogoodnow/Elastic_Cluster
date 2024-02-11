@@ -19,4 +19,9 @@ services:
       - '--es.ssl-skip-verify'
     restart: always
     network_mode: host
-
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    mem_limit: "{{ elasticsearch_exporter_memory_limit }}"
+    cpus: "{{ elasticsearch_exporter_cpu_limit }}"
