@@ -1,5 +1,4 @@
-version: "3.8"
-
+version: "{{ docker_api_version }}"
 services:
   elastic-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}:
     container_name: elastic-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}

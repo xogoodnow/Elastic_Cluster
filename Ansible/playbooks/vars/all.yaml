@@ -30,4 +30,5 @@ elasticsearch_base_directory: "/root/"
 victoria_metrics_base_directory: "/root/"
 elasticsearch_max_log_size: "20g"
 elasticsearch_max_kibana: "10g"
+docker_api_version: "2.4"
 
