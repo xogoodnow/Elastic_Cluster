@@ -52,7 +52,11 @@ services:
       interval: 10s
       timeout: 10s
       retries: 120
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     logging:
       driver: json-file
       options:
-        max-size: "10g"
+        max-size: "{{ elasticsearch_max_kibana }}"
