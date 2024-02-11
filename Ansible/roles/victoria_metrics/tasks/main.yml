@@ -216,7 +216,7 @@
       - 9093:9093
     volumes:
       - vmagentdata:/vmagentdata
-      - "{{ VICTORIA_METRICS_BASE_DIRECTORY }}Monitoring/Alertmanager/alertmanager.yaml:/etc/alertmanager/alertmanager.yaml"
+      - "{{ victoria_metrics_base_directory }}Monitoring/Alertmanager/alertmanager.yaml:/etc/alertmanager/alertmanager.yaml"
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yaml'
     network_mode: host
