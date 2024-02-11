@@ -18,6 +18,8 @@ services:
       memlock:
         soft: -1
         hard: -1
+    mem_limit: "{{ elasticsearch_memory_limit }}"
+    cpus: "{{ elasticsearch_cpu_limit }}"
     healthcheck:
       test:
         [
@@ -59,3 +61,6 @@ services:
       driver: json-file
       options:
         max-size: "{{ kibana_max_log_size }}"
+    mem_limit: "{{ kibana_memory_limit }}"
+    cpus: "{{ kibana_cpu_limit }}"
+
