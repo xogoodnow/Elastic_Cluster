@@ -1,0 +1,78 @@
+---
+- name: Setting up additional disks
+  include_tasks: {{ item }}
+  with_items:
+    - elasticsearch_disk_partitioning.yaml
+    - elasticsearch_disk_mount.yaml
+
+
+- name: Elasticsearch pre-setup
+  include_tasks: elasticsearch_pre_setup.yaml
+
+- name: Elasticsearch certificate generation
+  include_tasks: elasticsearch_certificate_generation.yaml
+  run_once: true
+
+- name: Elasticsearch cluster setup
+  include_tasks: elasticsearch_cluster_deployment.yaml
+
+- name: Pause for the cluster to be ready
+  pause:
+    seconds: 30
+
+- name: Elasticsearch deploy exporter
+  include_tasks: elasticsearch_deploy_exporter.yaml
+
+
+- name: Change password for kibana_system
+  uri:
+    url: "https://{{ ansible_host }}:9200/_security/user/kibana_system/_password"
+    method: POST
+    user: "elastic"
+    password: "{{ elastic_password }}"
+    body: '{"password": "{{ kibana_password }}"}'
+    body_format: json
+    validate_certs: false
+    force_basic_auth: true
+    status_code: 200
+    headers:
+      Content-Type: "application/json"
+  run_once: true
+  register: kibana_system_created
+
+- name: Set password for monitoring user
+  uri:
+    url: "https://{{ ansible_host }}:9200/_security/user/{{ monitoring_user }}"
+    method: POST
+    user: "elastic"
+    password: "{{ elastic_password }}"
+    body: '{"password": "{{ monitoring_password }}","roles" : [ "superuser" ]}'
+    body_format: json
+    validate_certs: false
+    force_basic_auth: true
+    status_code: 200
+    headers:
+      Content-Type: "application/json"
+  run_once: true
+  register: monitoring_user_created
+
+- name: Print out the monitoring user info
+  debug:
+    var: monitoring_user_created
+
+- name: Print out the monitoring user info
+  debug:
+    var: kibana_system_created
+
+
+- name: Elasticsearch enable stapshotting
+  include_tasks: elasticsearch_enable_snapshotting.yaml
+
+
+- name: Elasticsearch register repository
+  include_tasks: elasticsearch_snapshot_registy.yaml
+
+- name: Elasticsearch SLM
+  include_tasks: elasticsearch_slm.yaml
+
+
