@@ -46,7 +46,7 @@ resource "local_file" "inventory" {
       monitoring_ips = hcloud_server.monitoring.*.ipv4_address
     }
   )
-  filename = "${path.module}/../../inventory.yaml"
+  filename = "${path.module}/../../../Ansible/inventory/inventory.yaml"
 }
 
 
@@ -62,7 +62,7 @@ resource "local_file" "etc-hosts" {
 
     }
   )
-  filename = "${path.module}/../../../Ansible/roles/pre_setup/files/etchost.yaml"
+  filename = "${path.module}/../../../Ansible/roles/general/files/etchost.yaml"
 }
 
 
@@ -73,7 +73,7 @@ resource "local_file" "instances" {
       monitoring_ips = hcloud_server.monitoring.*.ipv4_address
     }
   )
-  filename = "${path.module}/../../../Ansible/roles/elasticsearch_cert_generation/files/instances.yaml"
+  filename = "${path.module}/../../../Ansible/roles/elasticsearch_cluster/files/instances.yaml"
 }
 
 
