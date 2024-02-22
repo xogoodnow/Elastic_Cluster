@@ -1,0 +1,27 @@
+version: "{{ docker_api_version }}"
+services:
+  elasticsearch_exporter:
+    container_name: elasticsearch_exporter-{{ ansible_play_hosts_all.index(inventory_hostname) +1 }}
+    image: "{{ elastic_exporter_base_image }}:{{ elasticsearch_exporter_version }}"
+    command:
+      - '--es.uri=https://{{ monitoring_user }}:{{ monitoring_password }}@elastic-{{ ansible_play_hosts_all.index(inventory_hostname) +1 }}-public:9200'
+      - '--collector.clustersettings'
+      - '--es.indices'
+      - '--es.indices_settings'
+      - '--es.aliases'
+      - '--es.shards'
+      - '--es.snapshots'
+      - '--es.data_stream'
+      - '--es.indices_mappings'
+      - '--es.slm'
+      - '--es.timeout=30s'
+      - '--es.clusterinfo.interval=1m'
+      - '--es.ssl-skip-verify'
+    restart: always
+    network_mode: host
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    mem_limit: "{{ elasticsearch_exporter_memory_limit }}"
+    cpus: "{{ elasticsearch_exporter_cpu_limit }}"
