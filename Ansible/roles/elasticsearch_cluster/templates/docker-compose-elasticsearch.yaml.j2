@@ -1,0 +1,66 @@
+version: "{{ docker_api_version }}"
+services:
+  elastic-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}:
+    container_name: elastic-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}
+    image: "{{ elastic_base_image }}:{{ elastic_version }}"
+    volumes:
+      - "{{ elasticsearch_base_directory }}Elasticsearch/Config/Certs:/usr/share/elasticsearch/config/certs"
+      - "{{ elasticsearch_base_directory }}Elasticsearch/Elasticsearch_Data/:/var/elasticsearch/data"
+      - "{{ elasticsearch_base_directory }}Elasticsearch/Config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml"
+    environment:
+      - ELASTIC_PASSWORD={{ elastic_password }}
+    network_mode: host
+    logging:
+      driver: json-file
+      options:
+        max-size: "{{ elasticsearch_max_log_size }}"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    mem_limit: "{{ elasticsearch_memory_limit }}"
+    cpus: "{{ elasticsearch_cpu_limit }}"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s --cacert /usr/share/elasticsearch/config/certs/ca/ca.crt https://localhost:9200 | grep -q 'missing authentication credentials'",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 120
+
+  kibana-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}:
+    container_name:  kibana-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}
+    image: "{{ kibana_base_image }}:{{ kibana_version }}"
+    volumes:
+      - "{{ elasticsearch_base_directory }}Elasticsearch/Config/Certs:/usr/share/kibana/config/certs"
+      - "{{ elasticsearch_base_directory }}Elasticsearch/Kibana/Kibana_Data:/usr/share/kibana/data"
+
+    network_mode: host
+    environment:
+      - SERVERNAME=kibana
+      - ELASTICSEARCH_HOSTS=https://elastic-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}-public:9200
+      - ELASTICSEARCH_USERNAME={{ kibana_system_username }}
+      - ELASTICSEARCH_PASSWORD={{ kibana_password }}
+      - ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=/usr/share/kibana/config/certs/ca/ca.crt
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s -I http://localhost:5601 | grep -q 'HTTP/1.1 302 Found'",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 120
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    logging:
+      driver: json-file
+      options:
+        max-size: "{{ kibana_max_log_size }}"
+    mem_limit: "{{ kibana_memory_limit }}"
+    cpus: "{{ kibana_cpu_limit }}"
+
