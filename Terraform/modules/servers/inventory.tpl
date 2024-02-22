@@ -1,6 +1,6 @@
 all:
     children:
-        helsinki:
+        elasticsearch:
             hosts:
             %{ for index, ip in elastic_ips }
                 elastic-${index}:
@@ -9,7 +9,8 @@ all:
                     mode: 'elastic'
                     init_cluster: ${index == 0 ? "'true'" : "'false'"}
             %{ endfor }
-
+        monitoring:
+            hosts:
             %{ for index, ip in monitoring_ips }
                 monitoring-${index}:
                     ansible_host: ${ip}
