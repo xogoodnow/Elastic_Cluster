@@ -1,7 +1,7 @@
 
 resource "null_resource" "Elastic" {
   provisioner "local-exec" {
-    command = "sleep 50  && PWD='../' ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory.yaml ../Ansible/playbooks/Setup.yaml --private-key sshkey/private_key.pem"
+    command = "sleep 50  && PWD='../' ANSIBLE_ROLES_PATH='../Ansible/roles/' ansible-playbook -i ../Ansible/inventory ../Ansible/playbooks/Deploy.yaml --private-key sshkey/private_key.pem"
   }
 }
 
