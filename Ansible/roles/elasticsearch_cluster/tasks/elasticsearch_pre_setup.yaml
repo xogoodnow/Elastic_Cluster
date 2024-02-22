@@ -1,0 +1,47 @@
+---
+- name: Check connectivity
+  ping:
+    data: alive
+
+- name: Increasing the vm.max_map_count on elastic nodes
+  lineinfile:
+    path: /etc/sysctl.conf
+    line: vm.max_map_count=262144
+    create: yes
+
+
+- name: Fine-tune the kernel module to optimize elastic nodes
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    sysctl_set: true
+    sysctl_file: "/etc/sysctl.conf"
+    state: present
+    reload: true
+  with_items:
+    - { name: "vm.max_map_count", value: '262144' }
+
+
+
+- name: Create the required directories
+  file:
+    path: "{{ elasticsearch_base_directory }}{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0777"
+  with_items:
+    - Elasticsearch/
+    - Elasticsearch/Docker
+    - Elasticsearch/Elasticsearch_Data/
+    - Elasticsearch/Config/
+    - Elasticsearch/Config/Certs
+    - Elasticsearch/Kibana
+    - Elasticsearch/Kibana/Docker
+    - Elasticsearch/Kibana/Kibana_Data
+    - Elasticsearch/Monitoring
+    - Elasticsearch/Monitoring/Elasticsearch_Exporter
+    - Elasticsearch/Monitoring/Elasticsearch_Exporter/Docker
+
+
+
