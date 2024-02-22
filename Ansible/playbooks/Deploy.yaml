@@ -6,18 +6,20 @@
     - role: general
       tags: general-setup
 
-- name: setting up Elasticsearch cluster
+- name: Setting up Elasticsearch cluster
   hosts: elasticsearch
   become: true
   roles:
     - role: elasticsearch_cluster
       tags: elasticsearch-setup
 
-
 - name: Set up the monitoring stack
-  include_role:
-    name: "{{ item }}"
-  with_items:
-    - $PWD/roles/victoria_metrics
-  when: mode == 'monitoring'
-
+  hosts: monitoring
+  become: true
+  tasks:
+    - name: Include monitoring roles
+      include_role:
+        name: "{{ item }}"
+      loop:
+        - $PWD/roles/victoria_metrics
+      when: mode == 'monitoring'
