@@ -1,0 +1,14 @@
+---
+- name: General setup
+  hosts: all
+  become: true
+  roles:
+    - role: general
+      tags: general-setup
+
+- name: setting up Elasticsearch cluster
+  hosts: redis
+  become: true
+  roles:
+    - role: elasticsearch_cluster
+      tags: elasticsearch-setup
