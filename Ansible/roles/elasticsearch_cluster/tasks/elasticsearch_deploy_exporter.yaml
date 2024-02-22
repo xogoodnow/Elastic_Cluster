@@ -1,0 +1,24 @@
+---
+- name: Check connectivity
+  ping:
+    data: alive
+
+
+
+- name: Set the docker compose file for each elastic instance
+  template:
+    src: templates/docker-compose-exporter.yaml.j2
+    dest: "{{ elasticsearch_base_directory }}Elasticsearch/Monitoring/Elasticsearch_Exporter/Docker/docker-compose.yaml"
+
+-
+- name: Run the containers
+  community.general.docker_compose:
+    project_src: "{{ elasticsearch_base_directory }}Elasticsearch/Monitoring/Elasticsearch_Exporter/Docker/"
+    pull: true
+    recreate: never
+    state: present
+    restarted: false
+    remove_orphans: no
+    remove_volumes: false
+
+
