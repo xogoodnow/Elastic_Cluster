@@ -7,7 +7,7 @@
       tags: general-setup
 
 - name: setting up Elasticsearch cluster
-  hosts: redis
+  hosts: elasticsearch
   become: true
   roles:
     - role: elasticsearch_cluster
