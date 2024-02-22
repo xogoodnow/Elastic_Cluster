@@ -1,0 +1,52 @@
+---
+- name: Check connectivity
+  ping:
+    data: alive
+
+
+- name: Copy the certs to the nodes
+  copy:
+    src: "files/{{ item }}"
+    dest: "{{ elasticsearch_base_directory }}Elasticsearch/Config/Certs/"
+  with_items:
+    - "certs.zip"
+    - "ca.zip"
+    - "http_ca.crt"
+    - "http.p12"
+    - "transport.p12"
+    - "instances.yaml"
+
+
+- name: Unzip the certs
+  unarchive:
+    src: "{{ elasticsearch_base_directory }}Elasticsearch/Config/Certs/{{ item }}"
+    remote_src: true
+    dest: "{{ elasticsearch_base_directory }}Elasticsearch/Config/Certs/"
+  with_items:
+    - "certs.zip"
+    - "ca.zip"
+
+
+- name: Set the docker compose file for each elastic instance
+  template:
+    src: templates/docker-compose-elasticsearch.yaml.j2
+    dest: "{{ elasticsearch_base_directory }}Elasticsearch/Docker/docker-compose.yaml"
+
+
+- name: Set the config file for each elastic instance
+  template:
+    src: templates/elasticsearch.yml.j2
+    dest: "{{ elasticsearch_base_directory }}Elasticsearch/Config/elasticsearch.yml"
+
+
+- name: Run the containers
+  community.general.docker_compose:
+    project_src: "{{ elasticsearch_base_directory }}Elasticsearch/Docker/"
+    pull: true
+    recreate: never
+    state: present
+    restarted: false
+    remove_orphans: no
+    remove_volumes: false
+
+
