@@ -1,0 +1,36 @@
+---
+- name: Check connectivity
+  ping:
+    data: alive
+
+
+- name: Remove partition number 1
+  community.general.parted:
+    device: "{{ disk_attach_path }}"
+    number: 1
+    state: absent
+
+
+- name: Create a new primary partition
+  community.general.parted:
+    device: "{{ disk_attach_path }}"
+    number: 1
+    state: present
+    fs_type: ext4
+    part_start: "0%"
+    part_end: "100%"
+    label: "gpt"
+
+- name: Read device information (always use unit when probing)
+  community.general.parted: device="{{ disk_attach_path }}1" unit=MiB
+  register: disk_info
+
+- name: Print out the disk info
+  debug:
+    var: disk_info
+
+- name: Create a ext4 filesystem on "{{ disk_attach_path }}"
+  community.general.filesystem:
+    fstype: "ext4"
+    dev: "{{ disk_attach_path }}1"
+    force: true
