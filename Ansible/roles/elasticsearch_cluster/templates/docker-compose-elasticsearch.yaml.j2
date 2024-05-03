@@ -1,6 +1,6 @@
 version: "{{ docker_api_version }}"
 services:
-  elastic-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}:
+  elastic-{{ ansible_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}:
     container_name: elastic-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}
     image: "{{ elastic_base_image }}:{{ elastic_version }}"
     volumes:

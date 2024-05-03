@@ -1,7 +1,7 @@
 version: "{{ docker_api_version }}"
 services:
   elasticsearch_exporter:
-    container_name: elasticsearch_exporter-{{ ansible_play_hosts_all.index(inventory_hostname) +1 }}
+    container_name: elasticsearch_exporter-{{ ansible_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) +1 }}
     image: "{{ elastic_exporter_base_image }}:{{ elasticsearch_exporter_version }}"
     command:
       - '--es.uri=https://{{ monitoring_user }}:{{ monitoring_password }}@elastic-{{ ansible_play_hosts_all.index(inventory_hostname) +1 }}-public:9200'
