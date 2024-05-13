@@ -6,8 +6,9 @@ services:
     restart: unless-stopped
     volumes:
       - "{{ elasticsearch_base_directory }}Elasticsearch/Config/Certs:/usr/share/elasticsearch/config/certs"
-      - "{{ elasticsearch_base_directory }}Elasticsearch/Elasticsearch_Data/:/var/elasticsearch/data"
+      - "{{ elasticsearch_base_directory }}{{ elastic_data_path_on_host }}:{{ elastic_data_path_on_container }}"
       - "{{ elasticsearch_base_directory }}Elasticsearch/Config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml"
+      - "{{ elasticsearch_base_directory }}{{ elastic_log_path_on_host }}:{{ elastic_log_path_on_container }}"
     environment:
       - ELASTIC_PASSWORD={{ elastic_password }}
     network_mode: host
