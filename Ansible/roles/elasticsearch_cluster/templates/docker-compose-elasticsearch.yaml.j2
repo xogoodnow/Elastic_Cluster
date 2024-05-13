@@ -11,6 +11,7 @@ services:
       - "{{ elasticsearch_base_directory }}{{ elastic_log_path_on_host }}:{{ elastic_log_path_on_container }}"
     environment:
       - ELASTIC_PASSWORD={{ elastic_password }}
+      - ELASTICSEARCH_DEPLOYMENT_ENVIRONMENT={{ elasticsearch_deployment_environment }}
     network_mode: host
     logging:
       driver: json-file
@@ -47,6 +48,7 @@ services:
       - ELASTICSEARCH_USERNAME={{ kibana_system_username }}
       - ELASTICSEARCH_PASSWORD={{ kibana_password }}
       - ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=/usr/share/kibana/config/certs/ca/ca.crt
+      - ELASTICSEARCH_DEPLOYMENT_ENVIRONMENT={{ elasticsearch_deployment_environment }}
     healthcheck:
       test:
         [
