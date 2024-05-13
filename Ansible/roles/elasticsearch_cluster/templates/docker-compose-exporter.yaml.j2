@@ -17,7 +17,7 @@ services:
       - '--es.timeout=30s'
       - '--es.clusterinfo.interval=1m'
       - '--es.ssl-skip-verify'
-    restart: always
+    restart: unless-stopped
     network_mode: host
     ulimits:
       memlock:
