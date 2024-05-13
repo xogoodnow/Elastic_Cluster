@@ -3,6 +3,7 @@ services:
   elastic:
     container_name: elastic-{{ ansible_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}
     image: "{{ elastic_base_image }}:{{ elastic_version }}"
+    restart: unless-stopped
     volumes:
       - "{{ elasticsearch_base_directory }}Elasticsearch/Config/Certs:/usr/share/elasticsearch/config/certs"
       - "{{ elasticsearch_base_directory }}Elasticsearch/Elasticsearch_Data/:/var/elasticsearch/data"
@@ -33,6 +34,7 @@ services:
   kibana:
     container_name:  kibana-{{ ansible_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}
     image: "{{ kibana_base_image }}:{{ kibana_version }}"
+    restart: unless-stopped
     volumes:
       - "{{ elasticsearch_base_directory }}Elasticsearch/Config/Certs:/usr/share/kibana/config/certs"
       - "{{ elasticsearch_base_directory }}Elasticsearch/Kibana/Kibana_Data:/usr/share/kibana/data"
