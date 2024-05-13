@@ -42,6 +42,7 @@
     - Elasticsearch/Monitoring
     - Elasticsearch/Monitoring/Elasticsearch_Exporter
     - Elasticsearch/Monitoring/Elasticsearch_Exporter/Docker
+    - Elasticsearch/Logs
 
 
 
