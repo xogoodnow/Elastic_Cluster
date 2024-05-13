@@ -9,7 +9,8 @@ transport.host: elastic-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 
 # https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-node.html
 #node.master: true
 node.roles: [ data, master, ingest, data_hot, data_warm, remote_cluster_client, transform, data_content   ]
-path.data:  /var/elasticsearch/data
+path.data:  {{ elastic_data_path_on_container }}
+path.logs: {{ elastic_log_path_on_container }}
 
 
 
