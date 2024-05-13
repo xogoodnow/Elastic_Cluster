@@ -27,7 +27,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "curl -s --cacert /usr/share/elasticsearch/config/certs/ca/ca.crt https://localhost:9200 | grep -q 'missing authentication credentials'",
+          "curl -s -I  -k https://elastic-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}-public:9200  | grep -q '401'",
         ]
       interval: 10s
       timeout: 10s
