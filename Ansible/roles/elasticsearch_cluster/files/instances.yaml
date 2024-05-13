@@ -1,0 +1,21 @@
+instances:
+
+    - name: elastic-1
+      dns:
+        - localhost
+        - elastic-1
+        - elastic-1-public
+
+
+    - name: elastic-2
+      dns:
+        - localhost
+        - elastic-2
+        - elastic-2-public
+
+
+    - name: elastic-3
+      dns:
+        - localhost
+        - elastic-3
+        - elastic-3-public
