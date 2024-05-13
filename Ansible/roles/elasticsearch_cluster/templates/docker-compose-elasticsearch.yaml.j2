@@ -1,7 +1,7 @@
 version: "{{ docker_api_version }}"
 services:
-  elastic-{{ ansible_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}:
-    container_name: elastic-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}
+  elastic:
+    container_name: elastic-{{ ansible_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}
     image: "{{ elastic_base_image }}:{{ elastic_version }}"
     volumes:
       - "{{ elasticsearch_base_directory }}Elasticsearch/Config/Certs:/usr/share/elasticsearch/config/certs"
@@ -30,8 +30,8 @@ services:
       timeout: 10s
       retries: 120
 
-  kibana-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}:
-    container_name:  kibana-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}
+  kibana:
+    container_name:  kibana-{{ ansible_hostname }}-{{ ansible_play_hosts_all.index(inventory_hostname) + 1 }}
     image: "{{ kibana_base_image }}:{{ kibana_version }}"
     volumes:
       - "{{ elasticsearch_base_directory }}Elasticsearch/Config/Certs:/usr/share/kibana/config/certs"
