@@ -61,10 +61,10 @@ bootstrap.memory_lock: true
 cluster.no_master_block: write
 
 # https://www.elastic.co/guide/en/elasticsearch/reference/current/recovery.html
-# indices.recovery.max_bytes_per_sec: 125mb
+indices.recovery.max_bytes_per_sec: 250mb
 
 indices.recovery.max_concurrent_file_chunks: 6
-indices.recovery.max_concurrent_operations: 1
+indices.recovery.max_concurrent_operations: 2
 
 
 
