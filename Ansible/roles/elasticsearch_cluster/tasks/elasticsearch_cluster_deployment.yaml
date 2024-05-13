@@ -39,14 +39,18 @@
     dest: "{{ elasticsearch_base_directory }}Elasticsearch/Config/elasticsearch.yml"
 
 
-- name: Run the containers
-  community.general.docker_compose:
-    project_src: "{{ elasticsearch_base_directory }}Elasticsearch/Docker/"
-    pull: true
-    recreate: never
-    state: present
-    restarted: false
-    remove_orphans: no
-    remove_volumes: false
+#- name: Run the containers
+#  community.general.docker_compose:
+#    project_src: "{{ elasticsearch_base_directory }}Elasticsearch/Docker/"
+#    pull: true
+#    recreate: never
+#    state: present
+#    restarted: false
+#    remove_orphans: no
+#    remove_volumes: false
 
 
+
+- name: Run the containers for elastic and kibana
+  shell:
+    cmd: "docker-compose -f {{ elasticsearch_base_directory }}Elasticsearch/Docker/docker-compose.yaml up -d "
